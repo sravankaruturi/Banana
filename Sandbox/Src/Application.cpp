@@ -34,11 +34,11 @@ class SandboxTest : public testing::Test
 {
 
 protected:
-	ee::Application* a1;
+	ee::Application* a1{};
 
 };
 
-TEST_F(SandboxTest, CheckIfCoreInitializedInConstructor)
+TEST_F(SandboxTest, CheckIfLoggerInitialized)
 {
 
 	a1 = new Sandbox();
@@ -50,3 +50,4 @@ TEST_F(SandboxTest, CheckIfCoreInitializedInConstructor)
 	EXPECT_TRUE(NULL != ee::Log::GetClientLogger());
 
 }
+
