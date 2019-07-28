@@ -141,6 +141,10 @@
   <ItemGroup>
     <ClCompile Include="Src\Application.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Sandbox.h" />
+    <ClInclude Include="Src\Tests\SandboxTests.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
