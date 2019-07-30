@@ -1,0 +1,6 @@
+[submodule "Vendor/googletest"]
+	path = Vendor/googletest
+	url = https://github.com/sravankaruturi/googletest
+[submodule "Vendor/spdlog"]
+	path = Vendor/spdlog
+	url = https://github.com/gabime/spdlog
