@@ -26,6 +26,7 @@ namespace ee
 	{
 		
 	public:
+
 		using EventCallbackFn = std::function<void(Event&)>;
 
 		virtual ~Window() = default;
