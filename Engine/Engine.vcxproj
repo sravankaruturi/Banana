@@ -140,14 +140,22 @@
     <ClInclude Include="Src\Engine.h" />
     <ClInclude Include="Src\Engine\Core\Application.h" />
     <ClInclude Include="Src\Engine\Core\Core.h" />
+    <ClInclude Include="Src\Engine\Core\Events\ApplicationEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Events\Event.h" />
+    <ClInclude Include="Src\Engine\Core\Events\KeyEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h" />
     <ClInclude Include="Src\Engine\Core\Log.h" />
     <ClInclude Include="Src\Engine\Core\Platform.h" />
+    <ClInclude Include="Src\Engine\Core\Window.h" />
     <ClInclude Include="Src\Engine\EntryPoint.h" />
+    <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp" />
     <ClCompile Include="Src\Engine\Core\Core.cpp" />
     <ClCompile Include="Src\Engine\Core\Log.cpp" />
+    <ClCompile Include="Src\Engine\Core\Window.cpp" />
+    <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vendor\googletest\googletest\GoogleTest.vcxproj">

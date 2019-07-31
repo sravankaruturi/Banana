@@ -132,7 +132,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sandbox.h" />
+    <ClInclude Include="src\Tests\AssertTests.h" />
     <ClInclude Include="src\Tests\SandboxTests.h" />
+    <ClInclude Include="src\Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

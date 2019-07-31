@@ -1,4 +1,4 @@
-﻿#include "Tests/SandboxTests.h"
+﻿#include "Tests/Tests.h"
 
 int main()
 {
@@ -10,6 +10,7 @@ int main()
 	std::cin >> c;
 
 	ee::Application* app = ee::CreateApplication();
+	EE_CORE_ASSERT(app, "Application is null");
 	app->Run();
 	delete app;
 

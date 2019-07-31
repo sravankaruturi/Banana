@@ -25,6 +25,12 @@
     <ClInclude Include="Src\Engine\EntryPoint.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Events\Event.h" />
+    <ClInclude Include="Src\Engine\Core\Events\KeyEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Events\ApplicationEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Window.h" />
+    <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -36,5 +42,7 @@
     <ClCompile Include="Src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Core\Window.cpp" />
+    <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

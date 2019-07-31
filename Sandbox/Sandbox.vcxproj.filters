@@ -10,6 +10,8 @@
     <ClInclude Include="src\Tests\SandboxTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="src\Tests\AssertTests.h" />
+    <ClInclude Include="src\Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

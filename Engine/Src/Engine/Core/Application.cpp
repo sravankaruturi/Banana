@@ -6,6 +6,7 @@ namespace ee
 	Application::Application()
 	{
 		InitializeCore();
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -15,6 +16,9 @@ namespace ee
 
 	void Application::Run()
 	{
-		while (true);
+		while (true)
+		{
+			m_Window->OnUpdate();
+		}
 	}
 }
