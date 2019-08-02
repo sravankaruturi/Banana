@@ -135,7 +135,7 @@
     <ClInclude Include="src\Tests\AssertTests.h" />
     <ClInclude Include="src\Tests\SandboxTests.h" />
     <ClInclude Include="src\Tests\Tests.h" />
-    <ClInclude Include="Src\Tests\WindowTests.h" />
+    <ClInclude Include="src\Tests\WindowTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

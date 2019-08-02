@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+#include <sstream>
+
 namespace ee
 {
 	
@@ -11,14 +13,19 @@ namespace ee
 	private:
 		float m_MouseX;
 		float m_MouseY;
-		float m_MouseDx;
-		float m_MouseDy;
 
 	public:
-		MouseMovedEvent(const float x, const float y, const float dx, const float dy)
-			: m_MouseX(x), m_MouseY(y), m_MouseDx(dx), m_MouseDy(dy)
+		MouseMovedEvent(const float x, const float y)
+			: m_MouseX(x), m_MouseY(y)
 		{
 			
+		}
+
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "MouseMovedEvent: " << m_MouseX << ", " << m_MouseY;
+			return ss.str();
 		}
 		
 		[[nodiscard]] float GetX() const { return m_MouseX; }
@@ -26,6 +33,37 @@ namespace ee
 
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY( EventCategoryMouse | EventCategoryInput)
+
+	};
+
+	class MouseScrolledEvent : public Event
+	{
+		
+	private:
+		float m_XOffset;
+		float m_YOffset;
+
+	public:
+
+		MouseScrolledEvent(const float xOffset, const float yOffset)
+			: m_XOffset(xOffset), m_YOffset(yOffset)
+		{
+
+		}
+
+		[[nodiscard]] float GetXOffset() const	{ return m_XOffset; }
+		[[nodiscard]] float GetYOffset() const { return m_YOffset;	}
+
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(MouseScrolled);
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput);
+
 
 	};
 
@@ -47,18 +85,20 @@ namespace ee
 
 	class MouseButtonPressedEvent final : public MouseButtonEvent
 	{
-		
-	private:
-		int m_RepeatCount;
 
 	public:
-		MouseButtonPressedEvent(const int button, const int repeatCount)
-			: MouseButtonEvent(button), m_RepeatCount(repeatCount)
+		MouseButtonPressedEvent(const int button)
+			: MouseButtonEvent(button)
 		{
 			
 		}
 
-		[[nodiscard]] int GetRepeatCount() const { return m_RepeatCount; }
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "MouseButtonPressed: " << m_Button;
+			return ss.str();
+		}
 
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 
@@ -71,6 +111,13 @@ namespace ee
 			: MouseButtonEvent(button)
 		{
 			
+		}
+
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "MouseReleasedPressed: " << m_Button;
+			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(MouseButtonReleased)

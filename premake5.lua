@@ -11,7 +11,7 @@ workspace "Banana"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"]      = "Vendor/GLFW/include"
+IncludeDir["GLFW"]      = "Vendor/glfw/include"
 IncludeDir["Glad"]      = "Vendor/Glad/include"
 IncludeDir["ImGui"]     = "Vendor/ImGui"
 IncludeDir["glm"]       = "Vendor/glm"
@@ -20,7 +20,7 @@ IncludeDir["gtest"]     = "Vendor/googletest/googletest/include"
 
 group "Dependencies"
 include "Vendor/googletest/googletest"
--- include "Vendor/GLFW"
+include "Vendor/glfw"
 -- include "Vendor/Glad"
 -- include "Vendor/ImGui"
 
@@ -59,7 +59,7 @@ project "Engine"
     }
 
     links{
-        -- "GLFW",
+        "GLFW",
         -- "Glad",
         -- "ImGui",
         "GoogleTest",

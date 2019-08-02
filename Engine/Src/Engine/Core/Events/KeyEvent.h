@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+#include <sstream>
+
 namespace ee
 {
 	
@@ -38,6 +40,13 @@ namespace ee
 
 		[[nodiscard]] int GetRepeatCount() const { return m_RepeatCount; }
 
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+			return ss.str();
+		}
+
 		EVENT_CLASS_TYPE(KeyPressed);
 	};
 
@@ -48,6 +57,13 @@ namespace ee
 		KeyReleasedEvent(const int keyCode)
 			: KeyEvent(keyCode)
 		{
+		}
+
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyReleasedEvent: " << m_KeyCode;
+			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased);

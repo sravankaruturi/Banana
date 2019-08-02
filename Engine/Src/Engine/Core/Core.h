@@ -17,8 +17,8 @@ namespace ee
 
 #ifdef EE_ENABLE_ASSERTS
 
-#define EE_ASSERT(x, ...) { if(!(x)) { EE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-#define EE_CORE_ASSERT(x, ...) { if(!(x)) { EE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#define EE_ASSERT(x, ...) { if(!(x)) { EE_ERROR("Assertion Failed: {0} at {1} : {2}", __VA_ARGS__, __FILE__, __LINE__); __debugbreak(); } }
+#define EE_CORE_ASSERT(x, ...) { if(!(x)) { EE_CORE_ERROR("Assertion Failed: {0} at {1} : {2}", __VA_ARGS__, __FILE__, __LINE__); __debugbreak(); } }
 
 #endif // EE_ENABLE_ASSERTS
 

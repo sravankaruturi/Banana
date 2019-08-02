@@ -7,12 +7,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Sandbox.h" />
+    <ClInclude Include="src\Tests\AssertTests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
     <ClInclude Include="src\Tests\SandboxTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tests\AssertTests.h" />
-    <ClInclude Include="src\Tests\Tests.h" />
-    <ClInclude Include="Src\Tests\WindowTests.h" />
+    <ClInclude Include="src\Tests\Tests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tests\WindowTests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

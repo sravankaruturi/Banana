@@ -4,7 +4,7 @@ int main()
 {
 
 	::testing::InitGoogleTest();
-	return RUN_ALL_TESTS();
+	RUN_ALL_TESTS();
 
 	char c;
 	std::cin >> c;

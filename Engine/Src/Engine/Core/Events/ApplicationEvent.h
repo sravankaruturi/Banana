@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+#include <sstream>
+
 namespace ee
 {
 	
@@ -11,6 +13,32 @@ namespace ee
 		WindowClosedEvent() = default;
 
 		EVENT_CLASS_TYPE(WindowClosed)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
+	class WindowResizeEvent final : public Event
+	{
+
+		euint m_Width, m_Height;
+
+	public:
+		WindowResizeEvent(euint width, euint height)
+			: m_Width(width), m_Height(height)
+		{
+			
+		}
+
+		[[nodiscard]] std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+			return ss.str();
+		}
+
+		[[nodiscard]] euint GetWidth() const { return m_Width; }
+		[[nodiscard]] euint GetHeight() const { return m_Height; }
+
+		EVENT_CLASS_TYPE(WindowResize)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 

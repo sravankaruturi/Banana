@@ -19,5 +19,7 @@ TEST_F(WindowTest, CheckWindowInit)
 	EXPECT_EQ(m_Window->GetHeight(), wp.Height);
 	EXPECT_EQ(m_Window->GetWidth(), wp.Width);
 
+	
+
 }
 

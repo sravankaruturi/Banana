@@ -2,6 +2,8 @@
 
 #include "Engine/Core/Window.h"
 
+#include <GLFW/glfw3.h>
+
 namespace ee
 {
 	
@@ -10,11 +12,19 @@ namespace ee
 		
 	private:
 
-		std::string m_Title;
-		euint m_Width;
-		euint m_Height;
+		struct WindowData
+		{
+			std::string Title;
+			euint Width;
+			euint Height;
+			bool VSync;
 
-		EventCallbackFn m_EventCallbackFn;
+			EventCallbackFn EventCallback;
+		};
+
+
+		WindowData m_WindowData;
+		GLFWwindow* m_Window;
 
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
@@ -27,10 +37,12 @@ namespace ee
 
 		virtual void OnUpdate() override;
 
-		inline void SetEventCallback(const EventCallbackFn& callback) override { m_EventCallbackFn = callback; }
+		inline void SetEventCallback(const EventCallbackFn& callback) override { m_WindowData.EventCallback = callback; }
+		void SetVSync(bool enabled) override;
+		[[nodiscard]] bool IsVSync() const override;
 
-		[[nodiscard]] euint GetWidth() const override { return m_Width; }
-		[[nodiscard]] euint GetHeight() const override { return m_Height; }
+		[[nodiscard]] euint GetWidth() const override { return m_WindowData.Width; }
+		[[nodiscard]] euint GetHeight() const override { return m_WindowData.Height; }
 	};
 
 }

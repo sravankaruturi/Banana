@@ -2,6 +2,7 @@
 
 #include "Engine/Core/Core.h"
 #include <functional>
+#include "Engine/Core/Log.h"
 
 namespace ee
 {
@@ -12,7 +13,7 @@ namespace ee
 		WindowClosed, WindowResize, WindowFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
 	enum EventCategory
@@ -50,6 +51,8 @@ namespace ee
 		[[nodiscard]] virtual EventType GetEventType() const = 0;
 		[[nodiscard]] virtual const char * GetName() const = 0;
 		[[nodiscard]] virtual int GetCategoryFlags() const = 0;
+
+		[[nodiscard]] virtual std::string ToString() const { return GetName(); }
 
 		[[nodiscard]] bool IsInCategory(const EventCategory category) const
 		{
@@ -89,5 +92,10 @@ namespace ee
 		}
 
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
+	{
+		return os << e.ToString();
+	}
 
 }
