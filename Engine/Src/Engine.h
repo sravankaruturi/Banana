@@ -9,3 +9,5 @@
 #include "Engine/Core/Events/ApplicationEvent.h"
 #include "Engine/Core/Events/KeyEvent.h"
 #include "Engine/Core/Events/MouseEvent.h"
+
+#include "Engine/Renderer/Renderer.h"

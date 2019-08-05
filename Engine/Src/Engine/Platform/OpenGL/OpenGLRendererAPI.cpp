@@ -4,7 +4,7 @@
 
 namespace ee::re
 {
-	
+
 	void RendererAPI::Clear(float r, float g, float b, float a)
 	{
 		glClearColor(r, g, b, a);

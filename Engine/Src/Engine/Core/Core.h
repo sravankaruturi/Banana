@@ -31,3 +31,4 @@ namespace ee
 
 using euint = uint64_t;
 using eint = int64_t;
+using euchar = unsigned char;

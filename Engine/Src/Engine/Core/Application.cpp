@@ -1,6 +1,7 @@
 #include "eepch.h"
 #include "Application.h"
 
+#include "Engine/Renderer/Renderer.h"
 #include <GLFW/glfw3.h>
 
 namespace ee
@@ -81,6 +82,8 @@ namespace ee
 			{
 				layer->OnUpdate();
 			}
+
+			re::Renderer::GetInstance().WaitAndRender();
 
 			m_Window->OnUpdate();
 		}

@@ -19,6 +19,7 @@
     <ClInclude Include="src\Tests\WindowTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="src\Tests\ApplicationTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />

@@ -155,11 +155,13 @@
     <ClInclude Include="Src\Engine\Core\Platform.h" />
     <ClInclude Include="Src\Engine\Core\Window.h" />
     <ClInclude Include="Src\Engine\EntryPoint.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="Src\Engine\Renderer\RenderCommand.h" />
+    <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
     <ClInclude Include="Src\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Src\eepch.h" />
+    <ClInclude Include="Src\Engine\Renderer\RendererAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp" />
@@ -170,8 +172,11 @@
     <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp" />
     <ClCompile Include="Src\Engine\Core\Log.cpp" />
     <ClCompile Include="Src\Engine\Core\Window.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\RenderCommand.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
     <ClCompile Include="Src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="Src\eepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
