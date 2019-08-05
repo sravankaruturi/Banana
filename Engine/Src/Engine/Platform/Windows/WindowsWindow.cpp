@@ -1,7 +1,5 @@
-#pragma once
-
+#include "eepch.h"
 #include "WindowsWindow.h"
-#include "Engine/Core/Log.h"
 
 #include "Engine/Core/Events/ApplicationEvent.h"
 #include "Engine/Core/Events/KeyEvent.h"

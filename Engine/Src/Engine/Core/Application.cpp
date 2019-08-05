@@ -1,5 +1,5 @@
+#include "eepch.h"
 #include "Application.h"
-#include "Log.h"
 
 namespace ee
 {

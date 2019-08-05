@@ -1,6 +1,4 @@
-﻿#include "Core.h"
-#include "Log.h"
-#include <windows.h>
+﻿#include "eepch.h"
 
 #define EE_BUILD_ID "v0.1a"
 

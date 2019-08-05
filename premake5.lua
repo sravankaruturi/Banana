@@ -36,8 +36,8 @@ project "Engine"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    -- pchheader "eepch.h"
-    -- pchsource "Engine/Src/eepch.cpp"
+    pchheader "eepch.h"
+    pchsource "Engine/Src/eepch.cpp"
 
     files{
         "%{prj.name}/Src/**.h",

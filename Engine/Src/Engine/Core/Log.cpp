@@ -1,6 +1,5 @@
-﻿#include "Log.h"
+﻿#include "eepch.h"
 
-#include <memory>
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace ee

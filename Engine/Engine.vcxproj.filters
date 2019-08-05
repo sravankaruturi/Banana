@@ -52,6 +52,7 @@
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h">
       <Filter>Engine\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Src\eepch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -69,5 +70,6 @@
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp">
       <Filter>Engine\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Src\eepch.cpp" />
   </ItemGroup>
 </Project>

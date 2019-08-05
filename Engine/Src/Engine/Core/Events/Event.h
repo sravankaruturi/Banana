@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Engine/Core/Core.h"
-#include <functional>
-#include "Engine/Core/Log.h"
+#include "eepch.h"
 
 namespace ee
 {
