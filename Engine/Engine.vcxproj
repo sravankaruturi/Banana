@@ -147,6 +147,9 @@
     <ClInclude Include="Src\Engine\Core\Events\Event.h" />
     <ClInclude Include="Src\Engine\Core\Events\KeyEvent.h" />
     <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h" />
+    <ClInclude Include="Src\Engine\Core\Layers\ImGuiLayer.h" />
+    <ClInclude Include="Src\Engine\Core\Layers\Layer.h" />
+    <ClInclude Include="Src\Engine\Core\Layers\LayerStack.h" />
     <ClInclude Include="Src\Engine\Core\Log.h" />
     <ClInclude Include="Src\Engine\Core\Platform.h" />
     <ClInclude Include="Src\Engine\Core\Window.h" />
@@ -157,6 +160,9 @@
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp" />
     <ClCompile Include="Src\Engine\Core\Core.cpp" />
+    <ClCompile Include="Src\Engine\Core\Layers\ImGuiLayer.cpp" />
+    <ClCompile Include="Src\Engine\Core\Layers\Layer.cpp" />
+    <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp" />
     <ClCompile Include="Src\Engine\Core\Log.cpp" />
     <ClCompile Include="Src\Engine\Core\Window.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />

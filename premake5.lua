@@ -21,8 +21,8 @@ IncludeDir["gtest"]     = "Vendor/googletest/googletest/include"
 group "Dependencies"
 include "Vendor/googletest/googletest"
 include "Vendor/glfw"
--- include "Vendor/Glad"
--- include "Vendor/ImGui"
+include "Vendor/Glad"
+include "Vendor/ImGui"
 
 group ""
 
@@ -60,8 +60,8 @@ project "Engine"
 
     links{
         "GLFW",
-        -- "Glad",
-        -- "ImGui",
+        "Glad",
+        "ImGui",
         "GoogleTest",
         "opengl32.lib"
     }

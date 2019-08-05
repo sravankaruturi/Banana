@@ -40,17 +40,17 @@ namespace ee
 		
 		friend class EventDispatcher;
 
-	protected:
+	public:
+
 		bool m_Handled = false;
 
-	public:
 		virtual ~Event() = default;
 
 		[[nodiscard]] virtual EventType GetEventType() const = 0;
 		[[nodiscard]] virtual const char * GetName() const = 0;
 		[[nodiscard]] virtual int GetCategoryFlags() const = 0;
 
-		[[nodiscard]] virtual std::string ToString() const { return GetName(); }
+		[[nodiscard]] virtual std::string ToString() const { return std::string(GetName()); }
 
 		[[nodiscard]] bool IsInCategory(const EventCategory category) const
 		{
