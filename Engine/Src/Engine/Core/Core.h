@@ -27,5 +27,7 @@ namespace ee
 
 #define BIT(x) (1 << x)
 
+#define BIND_EVENT_FN(fn) std::bind(&Application::##fn, this, std::placeholders::_1)
+
 using euint = uint64_t;
 using eint = int64_t;

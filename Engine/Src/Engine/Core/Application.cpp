@@ -1,13 +1,18 @@
 #include "eepch.h"
 #include "Application.h"
 
+#include <GLFW/glfw3.h>
+
 namespace ee
 {
 
-#define BIND_EVENT_FN(fn) std::bind(&Application::##fn, this, std::placeholders::_1)
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
+
+		s_Instance = this;
+
 		InitializeCore();
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
@@ -32,11 +37,13 @@ namespace ee
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
@@ -47,6 +54,7 @@ namespace ee
 
 	bool Application::OnWindowClose(WindowClosedEvent& e)
 	{
+		EE_CORE_INFO("Window Closed");
 		m_Running = false;
 		return true;
 	}
@@ -54,6 +62,7 @@ namespace ee
 
 	Application::~Application()
 	{
+		s_Instance = nullptr;
 		ShutdownCore();
 	}
 
@@ -64,6 +73,9 @@ namespace ee
 
 		while (m_Running)
 		{
+
+			glClearColor(0.2, 0.2, 0.6, 1);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			for ( auto layer : m_LayerStack)
 			{

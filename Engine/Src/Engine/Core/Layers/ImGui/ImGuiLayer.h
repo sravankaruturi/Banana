@@ -7,6 +7,10 @@ namespace ee{
 	class ImGuiLayer : public Layer
 	{
 
+	private:
+
+		float m_Time = 0.0f;
+
 	public:
 
 		ImGuiLayer();
@@ -17,7 +21,7 @@ namespace ee{
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate() override;
-		void OnEvent(ee::Event& inEvent) override;
+
 	};
 
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/Core/Core.h"
 
 #include "Engine/Core/Window.h"
 #include "Engine/Core/Layers/LayerStack.h"
@@ -16,7 +17,21 @@ namespace ee
 
 		LayerStack m_LayerStack;
 
-	protected:
+		static Application* s_Instance;
+
+		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowClose(WindowClosedEvent& e);
+
+	public:
+
+		inline Window& GetWindow() { return *m_Window; }
+		static inline Application& GetInstance() { return *s_Instance; }
+
+		Application();
+
+		virtual ~Application();
+
+		void Run();
 
 		virtual void OnInit() {}
 		virtual void OnShutDown() {}
@@ -26,16 +41,6 @@ namespace ee
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
-
-		bool OnWindowResize(WindowResizeEvent& e);
-		bool OnWindowClose(WindowClosedEvent& e);
-
-	public:
-		Application();
-
-		virtual ~Application();
-
-		void Run();
 
 	};
 

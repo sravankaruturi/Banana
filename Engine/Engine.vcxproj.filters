@@ -10,11 +10,23 @@
     <Filter Include="Engine\Core\Events">
       <UniqueIdentifier>{97E562D1-83C9-2327-EC29-1E7AD82C0EA9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Layers">
+      <UniqueIdentifier>{72D045E0-5EB4-0636-C714-0189B317F1B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Layers\ImGui">
+      <UniqueIdentifier>{1C53D94B-0878-28CC-31C3-0D5C1D4727EA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Platform">
       <UniqueIdentifier>{8F0ABC95-FB95-295A-04A7-AC4E70B1855A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Platform\OpenGL">
+      <UniqueIdentifier>{E35CAFB7-CF56-D809-B8C3-6E1AA45C3E76}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Platform\Windows">
       <UniqueIdentifier>{C9D3B605-350B-FF9C-3E15-63C0AACB2596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Renderer">
+      <UniqueIdentifier>{E1119970-4D9D-0635-56AE-8929C2B86235}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +49,15 @@
     <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h">
       <Filter>Engine\Core\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Layers\ImGui\ImGuiLayer.h">
+      <Filter>Engine\Core\Layers\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Layers\Layer.h">
+      <Filter>Engine\Core\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Layers\LayerStack.h">
+      <Filter>Engine\Core\Layers</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Engine\Core\Log.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
@@ -49,13 +70,18 @@
     <ClInclude Include="Src\Engine\EntryPoint.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\ImGuiOpenGLRenderer.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h">
       <Filter>Engine\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Renderer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Src\eepch.h" />
-    <ClInclude Include="Src\Engine\Core\Layers\Layer.h" />
-    <ClInclude Include="Src\Engine\Core\Layers\LayerStack.h" />
-    <ClInclude Include="Src\Engine\Core\Layers\ImGuiLayer.h" />
+    <ClInclude Include="Src\Engine\Core\Input\Input.h" />
+    <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -63,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="Src\Engine\Core\Core.cpp">
       <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Core\Layers\ImGui\ImGuiBuild.cpp">
+      <Filter>Engine\Core\Layers\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Core\Layers\ImGui\ImGuiLayer.cpp">
+      <Filter>Engine\Core\Layers\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Core\Layers\Layer.cpp">
+      <Filter>Engine\Core\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp">
+      <Filter>Engine\Core\Layers</Filter>
     </ClCompile>
     <ClCompile Include="Src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
@@ -73,9 +111,10 @@
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp">
       <Filter>Engine\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Renderer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Src\eepch.cpp" />
-    <ClCompile Include="Src\Engine\Core\Layers\Layer.cpp" />
-    <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp" />
-    <ClCompile Include="Src\Engine\Core\Layers\ImGuiLayer.cpp" />
+    <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
   </ItemGroup>
 </Project>

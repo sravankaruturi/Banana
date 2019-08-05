@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>eepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;GLFW_INCLUDE_NONE;EE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;EE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Src;..\Vendor\spdlog\include;..\Vendor\glfw\include;..\Vendor\Glad\include;..\Vendor\ImGui;..\Vendor\glm;Vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -96,7 +96,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>eepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;GLFW_INCLUDE_NONE;EE_Release;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;EE_Release;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Src;..\Vendor\spdlog\include;..\Vendor\glfw\include;..\Vendor\Glad\include;..\Vendor\ImGui;..\Vendor\glm;Vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -120,7 +120,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>eepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;GLFW_INCLUDE_NONE;EE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EE_PLATFORM_WINDOWS;EE_BUILD_DLL;EE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Src;..\Vendor\spdlog\include;..\Vendor\glfw\include;..\Vendor\Glad\include;..\Vendor\ImGui;..\Vendor\glm;Vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -147,25 +147,32 @@
     <ClInclude Include="Src\Engine\Core\Events\Event.h" />
     <ClInclude Include="Src\Engine\Core\Events\KeyEvent.h" />
     <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h" />
-    <ClInclude Include="Src\Engine\Core\Layers\ImGuiLayer.h" />
+    <ClInclude Include="Src\Engine\Core\Input\Input.h" />
+    <ClInclude Include="Src\Engine\Core\Layers\ImGui\ImGuiLayer.h" />
     <ClInclude Include="Src\Engine\Core\Layers\Layer.h" />
     <ClInclude Include="Src\Engine\Core\Layers\LayerStack.h" />
     <ClInclude Include="Src\Engine\Core\Log.h" />
     <ClInclude Include="Src\Engine\Core\Platform.h" />
     <ClInclude Include="Src\Engine\Core\Window.h" />
     <ClInclude Include="Src\Engine\EntryPoint.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="Src\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Src\eepch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp" />
     <ClCompile Include="Src\Engine\Core\Core.cpp" />
-    <ClCompile Include="Src\Engine\Core\Layers\ImGuiLayer.cpp" />
+    <ClCompile Include="Src\Engine\Core\Layers\ImGui\ImGuiBuild.cpp" />
+    <ClCompile Include="Src\Engine\Core\Layers\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="Src\Engine\Core\Layers\Layer.cpp" />
     <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp" />
     <ClCompile Include="Src\Engine\Core\Log.cpp" />
     <ClCompile Include="Src\Engine\Core\Window.cpp" />
+    <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="Src\eepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -173,6 +180,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendor\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vendor\ImGui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Vendor\googletest\googletest\GoogleTest.vcxproj">
       <Project>{A2790B43-8E31-4D90-F738-26ECE30FE880}</Project>

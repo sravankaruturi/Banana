@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Engine.h"
-#include "Engine/Core/Layers/ImGuiLayer.h"
+#include "Engine/Core/Layers/ImGui/ImGuiLayer.h"
 
 class Sandbox : public ee::Application
 {
@@ -13,8 +13,7 @@ public:
 
 	virtual void OnInit()
 	{
-		PushLayer(new ee::ImGuiLayer());
-		PushOverlay(new ee::ImGuiLayer("Second Layer"));
+		PushOverlay(new ee::ImGuiLayer("ImGui"));
 	}
 
 };

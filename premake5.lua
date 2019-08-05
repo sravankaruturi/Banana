@@ -72,7 +72,6 @@ project "Engine"
         defines{
             "EE_PLATFORM_WINDOWS",
             "EE_BUILD_DLL",
-            "GLFW_INCLUDE_NONE"
         }
 
     filter "configurations:Debug"
@@ -111,6 +110,7 @@ project "Sandbox"
         "%{IncludeDir.spdlog}",
         "Engine/Src",
         "%{IncludeDir.glm}",
+        "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.gtest}"
     }

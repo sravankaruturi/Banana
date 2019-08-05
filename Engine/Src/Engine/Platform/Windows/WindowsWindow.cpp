@@ -1,9 +1,13 @@
 #include "eepch.h"
+
+#include <glad/glad.h>
 #include "WindowsWindow.h"
 
 #include "Engine/Core/Events/ApplicationEvent.h"
 #include "Engine/Core/Events/KeyEvent.h"
 #include "Engine/Core/Events/MouseEvent.h"
+
+#include <imgui.h>
 
 namespace ee
 {
@@ -43,6 +47,11 @@ namespace ee
 			);
 
 		glfwMakeContextCurrent(m_Window);
+
+		// Init Glad.
+		auto status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		EE_CORE_ASSERT(status, "Failed to init Glad!");
+
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
 		SetVSync(true);
 
@@ -93,6 +102,14 @@ namespace ee
 			}
 		);
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int codepoint)
+		{
+			auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+			KeyTypedEvent event(static_cast<int>(codepoint));
+			data.EventCallback(event);
+		});
+
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow * window, int button, int action, int mods)
 		{
 			auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
@@ -131,6 +148,15 @@ namespace ee
 			data.EventCallback(event);
 		});
 
+		m_ImGuiMouseCursors[ImGuiMouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		m_ImGuiMouseCursors[ImGuiMouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+		m_ImGuiMouseCursors[ImGuiMouseCursor_ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);   // FIXME: GLFW doesn't have this.
+		m_ImGuiMouseCursors[ImGuiMouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+		m_ImGuiMouseCursors[ImGuiMouseCursor_ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+		m_ImGuiMouseCursors[ImGuiMouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
+		m_ImGuiMouseCursors[ImGuiMouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
+		m_ImGuiMouseCursors[ImGuiMouseCursor_Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+
 	}
 
 	void WindowsWindow::ShutDown()
@@ -155,6 +181,10 @@ namespace ee
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+
+		ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+		glfwSetCursor(m_Window, m_ImGuiMouseCursors[imgui_cursor] ? m_ImGuiMouseCursors[imgui_cursor] : m_ImGuiMouseCursors[ImGuiMouseCursor_Arrow]);
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void WindowsWindow::SetVSync(const bool enabled)

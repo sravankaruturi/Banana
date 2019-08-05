@@ -25,6 +25,7 @@ namespace ee
 
 		WindowData m_WindowData;
 		GLFWwindow* m_Window;
+		GLFWcursor* m_ImGuiMouseCursors[9] = { 0 };
 
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
@@ -43,6 +44,8 @@ namespace ee
 
 		[[nodiscard]] euint GetWidth() const override { return m_WindowData.Width; }
 		[[nodiscard]] euint GetHeight() const override { return m_WindowData.Height; }
+
+		[[nodiscard]] virtual void* GetNativeWindow() const override { return m_Window; }
 	};
 
 }

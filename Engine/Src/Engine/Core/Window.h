@@ -42,6 +42,8 @@ namespace ee
 
 		virtual void OnUpdate() = 0;
 
+		[[nodiscard]] virtual void* GetNativeWindow() const = 0;
+
 	};
 
 }

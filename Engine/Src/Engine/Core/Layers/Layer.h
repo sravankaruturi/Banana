@@ -1,9 +1,9 @@
 ﻿#pragma once
 
+#include "Engine/Core/Core.h"
+
 namespace ee
 {
-
-	class Event;
 
 	class Layer
 	{

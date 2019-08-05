@@ -8,9 +8,9 @@ namespace ee
 	enum class EventType
 	{
 		None = 0,
-		WindowClosed, WindowResize, WindowFocus, WindowMoved,
+		WindowClosed, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
@@ -37,9 +37,6 @@ namespace ee
 	
 	class Event
 	{
-		
-		friend class EventDispatcher;
-
 	public:
 
 		bool m_Handled = false;
