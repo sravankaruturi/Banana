@@ -73,25 +73,18 @@ namespace ee {
 
 	}
 
-	void ImGuiLayer::OnUpdate()
+	void ImGuiLayer::Begin()
 	{
-
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::GetInstance();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
-
-		// TODO: Hazel timing
-		float time = (float)glfwGetTime();
-		io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1.0f / 60.0f);
-		m_Time = time;
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+	}
 
-		static bool show_demo_window = true;
-		if (show_demo_window)
-			ImGui::ShowDemoWindow(&show_demo_window);
+	void ImGuiLayer::End()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::GetInstance();
+		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
 		// Rendering
 		ImGui::Render();
@@ -104,7 +97,10 @@ namespace ee {
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
+	}
 
+	void ImGuiLayer::OnImGuiRender()
+	{
 	}
 
 }

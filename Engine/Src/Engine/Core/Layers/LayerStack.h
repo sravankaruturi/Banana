@@ -10,7 +10,7 @@ namespace ee {
 
 	private:
 		std::vector<Layer*> m_Layers;
-		std::vector<Layer*>::iterator m_LayerInsert;
+		euint m_LayerInsertIndex = 0;
 
 	public:
 

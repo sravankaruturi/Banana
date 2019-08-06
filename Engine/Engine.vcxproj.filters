@@ -81,7 +81,6 @@
     <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Renderer\RendererAPI.h" />
     <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
-    <ClInclude Include="Src\Engine\Renderer\RenderCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -117,7 +116,6 @@
     <ClCompile Include="Src\eepch.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
   </ItemGroup>
 </Project>

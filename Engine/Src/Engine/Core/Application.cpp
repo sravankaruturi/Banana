@@ -18,6 +18,20 @@ namespace ee
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		m_Running = true;
+
+		m_ImGuiLayer = new ImGuiLayer("Default ImGui");
+		PushOverlay(m_ImGuiLayer);
+	}
+
+
+	void Application::RenderImGui()
+	{
+		m_ImGuiLayer->Begin();
+		for(auto it : m_LayerStack)
+		{
+			it->OnImGuiRender();
+		}
+		m_ImGuiLayer->End();
 	}
 
 	void Application::OnEvent(Event& event)
@@ -74,14 +88,13 @@ namespace ee
 
 		while (m_Running)
 		{
-
-			glClearColor(0.2, 0.2, 0.6, 1);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 			for ( auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
+
+			Application* app = this;
+			EE_RENDER_1(app, { app->RenderImGui(); });
 
 			re::Renderer::GetInstance().WaitAndRender();
 

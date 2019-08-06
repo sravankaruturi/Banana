@@ -4,6 +4,7 @@
 #include "Engine/Core/Window.h"
 #include "Engine/Core/Layers/LayerStack.h"
 #include "Engine/Core/Events/ApplicationEvent.h"
+#include "Layers/ImGui/ImGuiLayer.h"
 
 namespace ee
 {
@@ -16,6 +17,7 @@ namespace ee
 		bool m_Running = false;
 
 		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer;
 
 		static Application* s_Instance;
 
@@ -41,6 +43,7 @@ namespace ee
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		void RenderImGui();
 
 	};
 

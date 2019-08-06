@@ -18,50 +18,48 @@ namespace ee::re
 		delete[] m_CommandBuffer;
 	}
 
-	void RenderCommandQueue::Submit(const RenderCommand& command)
-	{
-		auto ptr = m_CommandBuffer;
-
-		memcpy(m_CommandBuffer, &command, sizeof(RenderCommand));
-		m_CommandBufferPtr += sizeof(RenderCommand);
-		m_RenderCommandCount++;
-	}
-
-	void RenderCommandQueue::SubmitCommand(RenderCommandFn fn, void* params, euint size)
+	void* RenderCommandQueue::Allocate(RenderCommandFn fn, euint size)
 	{
 
-		byte*& buffer = m_CommandBufferPtr;
-		memcpy(buffer, &fn, sizeof(RenderCommandFn));
-		buffer += sizeof(RenderCommandFn);
-		memcpy(buffer, params, size);
-		buffer += size;
+		// TODO: Alignment
 
-		auto total_size = sizeof(RenderCommandFn) + size;
-		auto total_padding = total_size % 16;
-		buffer += total_padding;
+		// We reinterpret our char* into a RenderCommandFn struct and assign the command function here.
+		*reinterpret_cast<RenderCommandFn*>(m_CommandBufferPtr) = fn;
 
-		m_RenderCommandCount++;
+		// And update it by the size.
+		m_CommandBufferPtr += sizeof(RenderCommandFn);
+
+		// Add the size input at the end, and update the pointer to the next available pointer.
+		*reinterpret_cast<int*>(m_CommandBufferPtr) = size;
+		m_CommandBufferPtr += sizeof(euint);
+		
+		void* memory = m_CommandBufferPtr;
+		m_CommandBufferPtr += size;
+
+		m_CommandCount++;
+		return memory;
 
 	}
 
 	void RenderCommandQueue::Execute()
 	{
-		EE_RENDER_TRACE("RenderCommandQueue::Execute -- {0} commands, {1} bytes", m_RenderCommandCount, (m_CommandBufferPtr - m_CommandBuffer));
+		EE_RENDER_TRACE("RenderCommandQueue::Execute -- {0} commands, {1} bytes", m_CommandCount, (m_CommandBufferPtr - m_CommandBuffer));
 
 		byte* buffer = m_CommandBuffer;
 
-		for (int i = 0; i < m_RenderCommandCount; i++)
+		for (euint i = 0; i < m_CommandCount; i++)
 		{
-			RenderCommandFn fn = *reinterpret_cast<RenderCommandFn*>(buffer);
+			RenderCommandFn function = *reinterpret_cast<RenderCommandFn*>(buffer);
 			buffer += sizeof(RenderCommandFn);
-			buffer += (*fn)(buffer);
 
-			auto padding = reinterpret_cast<int>(buffer) % 16;
-			buffer += padding;
+			euint size = *reinterpret_cast<euint*>(buffer);
+			buffer += sizeof(euint);
+			function(buffer);
+			buffer += size;
 		}
 
 		m_CommandBufferPtr = m_CommandBuffer;
-		m_RenderCommandCount = 0;
+		m_CommandCount = 0;
 
 	}
 }

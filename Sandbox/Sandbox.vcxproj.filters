@@ -23,5 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Sandbox.cpp" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 ﻿#include "eepch.h"
 #include "Renderer.h"
-#include "RenderCommand.h"
 
 namespace ee::re
 {
@@ -13,8 +12,9 @@ namespace ee::re
 
 	void ::ee::re::Renderer::Clear(float r, float g, float b, float a)
 	{
-		float params[4] = { r, g, b, a };
-		s_Instance->m_CommandQueue.SubmitCommand(RenderCommand::Clear, params, sizeof(float) * 4);
+		EE_RENDER_4(r, g, b, a, {
+			RendererAPI::Clear(r, g, b, a);
+		});
 	}
 
 	void ::ee::re::Renderer::SetClearColour(float r, float g, float b, float a)

@@ -2,36 +2,36 @@
 #include "Engine.h"
 #include "Engine/Core/Layers/ImGui/ImGuiLayer.h"
 
-class GameLayer : public ee::Layer
+class EditorLayer : public ee::Layer
 {
+
+private:
+	float m_ClearColour[4];
 	
 public:
-	GameLayer() = default;
-
-	virtual ~GameLayer() = default;
-
-	virtual void OnUpdate() override
+	EditorLayer()
+		: m_ClearColour{0.2f, 0.2f, 0.8f, 1.0f}
 	{
-		ee::re::Renderer::Clear(0.2f, 0.3f, 0.8f, 1);
+		
 	}
 
+	virtual ~EditorLayer() = default;
+
+	virtual void OnAttach() override;
+	virtual void OnDetach() override;
+	virtual void OnUpdate() override;
+	virtual void OnImGuiRender() override;
+	virtual void OnEvent(ee::Event& event) override;
 };
+
 
 class Sandbox : public ee::Application
 {
 
 public:
-	Sandbox()
-	{
-		EE_TRACE("Hello!");
-	}
+	Sandbox();
 
-	virtual void OnInit()
-	{
-		PushLayer(new GameLayer());
-		PushOverlay(new ee::ImGuiLayer("ImGui"));
-	}
-
+	virtual void OnInit();
 };
 
 inline ee::Application* ee::CreateApplication()

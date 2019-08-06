@@ -157,7 +157,6 @@
     <ClInclude Include="Src\Engine\EntryPoint.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="Src\Engine\Renderer\RenderCommand.h" />
     <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
     <ClInclude Include="Src\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Src\eepch.h" />
@@ -175,7 +174,6 @@
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
     <ClCompile Include="Src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="Src\eepch.cpp">
