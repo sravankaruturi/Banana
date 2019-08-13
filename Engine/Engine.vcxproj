@@ -155,12 +155,21 @@
     <ClInclude Include="Src\Engine\Core\Platform.h" />
     <ClInclude Include="Src\Engine\Core\Window.h" />
     <ClInclude Include="Src\Engine\EntryPoint.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLIndexBuffer.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLVertexBuffer.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="Src\Engine\Renderer\IndexBuffer.h" />
     <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
     <ClInclude Include="Src\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Src\eepch.h" />
     <ClInclude Include="Src\Engine\Renderer\RendererAPI.h" />
+    <ClInclude Include="Src\Engine\Renderer\Shader.h" />
+    <ClInclude Include="Src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="Src\Engine\Renderer\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp" />
@@ -171,14 +180,22 @@
     <ClCompile Include="Src\Engine\Core\Layers\LayerStack.cpp" />
     <ClCompile Include="Src\Engine\Core\Log.cpp" />
     <ClCompile Include="Src\Engine\Core\Window.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLVertexBuffer.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
     <ClCompile Include="Src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="Src\eepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Shader.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vendor\glfw\GLFW.vcxproj">
@@ -193,6 +210,9 @@
     <ProjectReference Include="..\Vendor\googletest\googletest\GoogleTest.vcxproj">
       <Project>{A2790B43-8E31-4D90-F738-26ECE30FE880}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

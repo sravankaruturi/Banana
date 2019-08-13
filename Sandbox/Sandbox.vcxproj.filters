@@ -25,4 +25,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\Shader.glsl" />
+  </ItemGroup>
 </Project>

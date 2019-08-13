@@ -5,6 +5,7 @@ namespace ee::re
 {
 
 	Renderer* Renderer::s_Instance = new Renderer();
+	RendererAPIType RendererAPI::s_CurrentRendererAPI = RendererAPIType::OpenGL;
 
 	void ::ee::re::Renderer::Clear()
 	{
@@ -28,6 +29,12 @@ namespace ee::re
 
 	void ::ee::re::Renderer::Init()
 	{
+		EE_RENDER({ RendererAPI::Init(); });
+	}
+
+	void Renderer::DrawIndexed(euint count)
+	{
+		EE_RENDER_1(count, { RendererAPI::DrawIndexed(count); });
 	}
 
 	void ::ee::re::Renderer::WaitAndRender()

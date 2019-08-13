@@ -10,6 +10,15 @@
 #include "Engine/Core/Events/KeyEvent.h"
 #include "Engine/Core/Events/MouseEvent.h"
 
+#pragma region Renderer Includes
+
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/VertexBuffer.h"
+#include "Engine/Renderer/IndexBuffer.h"
+
+#include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/Shader.h"
+
+#pragma endregion
 
 #include <imgui.h>

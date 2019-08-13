@@ -81,6 +81,15 @@
     <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
     <ClInclude Include="Src\Engine\Renderer\RendererAPI.h" />
     <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
+    <ClInclude Include="Src\Engine\Renderer\IndexBuffer.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLIndexBuffer.h" />
+    <ClInclude Include="Src\Engine\Renderer\VertexBuffer.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLVertexBuffer.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h" />
+    <ClInclude Include="Src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="Src\Engine\Renderer\Shader.h" />
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -117,5 +126,16 @@
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\IndexBuffer.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLIndexBuffer.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\VertexBuffer.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="Src\Engine\Renderer\Shader.cpp" />
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

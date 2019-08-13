@@ -30,6 +30,8 @@ namespace ee
 #define EE_CORE_ERROR(...)		ee::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define EE_CORE_CRITICAL(...)	ee::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
+#define EE_TEST(x)					ee::Log::GetCoreLogger()->warn(#x)
+
 // Client Logging Macros
 #define EE_TRACE(...)		ee::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define EE_INFO(...)		ee::Log::GetClientLogger()->info(__VA_ARGS__)

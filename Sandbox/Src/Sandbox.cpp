@@ -16,6 +16,24 @@ static void ImGuiShowHelpMarker(const char* desc)
 
 void EditorLayer::OnAttach()
 {
+	static float vertices[] = {
+		-0.5f, -0.5f, +0.0f,
+		+0.5f, -0.5f, +0.0f,
+		+0.0f, +0.5f, +0.0f
+	};
+
+	static euint indices[] = {
+		0, 1, 2
+	};
+
+	m_Vb = std::unique_ptr<ee::re::VertexBuffer>(ee::re::VertexBuffer::Create());
+	m_Vb->SetData(vertices, sizeof(vertices));
+
+	m_Ib = std::unique_ptr<ee::re::IndexBuffer>(ee::re::IndexBuffer::Create());
+	m_Ib->SetData(indices, sizeof(indices));
+
+	m_Shader.reset(ee::re::Shader::Create("Assets/Shaders/Shader.glsl"));
+
 }
 
 void EditorLayer::OnDetach()
@@ -25,6 +43,11 @@ void EditorLayer::OnDetach()
 void EditorLayer::OnUpdate()
 {
 	ee::re::Renderer::Clear(m_ClearColour[0], m_ClearColour[1], m_ClearColour[2], m_ClearColour[3]);
+
+	m_Shader->Bind();
+	m_Vb->Bind();
+	m_Ib->Bind();
+	ee::re::Renderer::DrawIndexed(3);
 }
 
 void EditorLayer::OnImGuiRender()

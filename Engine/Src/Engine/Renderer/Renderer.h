@@ -25,9 +25,11 @@ namespace ee
 			static void Clear(float r, float g, float b, float a = 1.f);
 			static void SetClearColour(float r, float g, float b, float a);
 
+			static void DrawIndexed(euint count);
+
 			static void ClearMagenta();
 
-			void Init();
+			static void Init();
 
 			static void* Submit(RenderCommandFn fn, euint size)
 			{
@@ -64,7 +66,7 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 		}\
 	};\
 	{\
-		auto mem = RenderCommandQueue::Submit(sizeof(EE_RENDER_UNIQUE(EERenderCommand)), EE_RENDER_UNIQUE(EERenderCommand)::Execute);\
+		auto mem = ::ee::re::Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
 		new (mem) EE_RENDER_UNIQUE(EERenderCommand)();\
 	}\
 
@@ -74,7 +76,7 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
  * \param arg0 argument
  * \param code API call.
  * 
- * Initialize a struct containing a variable of the same type as arg0 without references or consts.
+ * Initialize a struct containing a variable of the same type as arg0 without references or consts. We would copy the variable value with the same name so that the code can run without any refactoring.
  */
 #define EE_RENDER_1(arg0, code) \
 	do {\
@@ -83,9 +85,9 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 		EE_RENDER_UNIQUE(EERenderCommand)(typename ::std::remove_const<typename ::std::remove_reference<decltype(arg0)>::type>::type arg0) \
 		: arg0(arg0) {}\
 		\
-        static void Execute(void* self)\
+        static void Execute(void* argBuffer)\
         {\
-			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg0;\
+			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg0;\
             code\
         }\
 		\
@@ -110,10 +112,10 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 											typename ::std::remove_const<typename ::std::remove_reference<decltype(arg1)>::type>::type arg1) \
 		: arg0(arg0), arg1(arg1) {}\
 		\
-        static void Execute(void* self)\
+        static void Execute(void* argBuffer)\
         {\
-			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg0;\
-			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg1;\
+			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg0;\
+			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg1;\
             code\
         }\
 		\
@@ -133,11 +135,11 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 											typename ::std::remove_const<typename ::std::remove_reference<decltype(arg2)>::type>::type arg2) \
 		: arg0(arg0), arg1(arg1), arg2(arg2) {}\
 		\
-        static void Execute(void* self)\
+        static void Execute(void* argBuffer)\
         {\
-			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg0;\
-			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg1;\
-			auto& arg2 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg2;\
+			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg0;\
+			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg1;\
+			auto& arg2 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg2;\
             code\
         }\
 		\
@@ -159,12 +161,12 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 											typename ::std::remove_const<typename ::std::remove_reference<decltype(arg3)>::type>::type arg3)\
 		: arg0(arg0), arg1(arg1), arg2(arg2), arg3(arg3) {}\
 		\
-        static void Execute(void* self)\
+        static void Execute(void* argBuffer)\
         {\
-			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg0;\
-			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg1;\
-			auto& arg2 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg2;\
-			auto& arg3 = ((EE_RENDER_UNIQUE(EERenderCommand)*)self)->arg3;\
+			auto& arg0 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg0;\
+			auto& arg1 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg1;\
+			auto& arg2 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg2;\
+			auto& arg3 = ((EE_RENDER_UNIQUE(EERenderCommand)*)argBuffer)->arg3;\
             code\
         }\
 		\
@@ -177,6 +179,18 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 		auto mem = Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
 		new (mem) EE_RENDER_UNIQUE(EERenderCommand)(arg0, arg1, arg2, arg3);\
 	}
+
+#define EE_RENDER_S(code) auto self = this;\
+	EE_RENDER_1(self, code)
+
+#define EE_RENDER_S1(arg0, code) auto self = this;\
+	EE_RENDER_2(self, arg0, code)
+
+#define EE_RENDER_S2(arg0, arg1, code) auto self = this;\
+	EE_RENDER_3(self, arg0, arg1, code)
+
+#define EE_RENDER_S3(arg0, arg1, arg2, code) auto self = this;\
+	EE_RENDER_4(self, arg0, arg1, arg2, code)
 
 #pragma endregion
 

@@ -7,6 +7,9 @@ class EditorLayer : public ee::Layer
 
 private:
 	float m_ClearColour[4];
+	std::unique_ptr<ee::re::VertexBuffer> m_Vb;
+	std::unique_ptr<ee::re::IndexBuffer> m_Ib;
+	std::unique_ptr<ee::re::Shader> m_Shader;
 	
 public:
 	EditorLayer()
@@ -31,7 +34,7 @@ class Sandbox : public ee::Application
 public:
 	Sandbox();
 
-	virtual void OnInit();
+	virtual void OnInit() override;
 };
 
 inline ee::Application* ee::CreateApplication()

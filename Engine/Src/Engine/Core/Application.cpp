@@ -21,6 +21,8 @@ namespace ee
 
 		m_ImGuiLayer = new ImGuiLayer("Default ImGui");
 		PushOverlay(m_ImGuiLayer);
+
+		re::Renderer::Init();
 	}
 
 

@@ -29,6 +29,6 @@ namespace ee
 
 #define BIND_EVENT_FN(fn) std::bind(&Application::##fn, this, std::placeholders::_1)
 
-using euint = uint64_t;
+using euint = unsigned int;
 using eint = int64_t;
 using euchar = unsigned char;
