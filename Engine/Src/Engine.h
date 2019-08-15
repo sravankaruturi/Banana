@@ -13,8 +13,7 @@
 #pragma region Renderer Includes
 
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Renderer/VertexBuffer.h"
-#include "Engine/Renderer/IndexBuffer.h"
+#include "Engine/Renderer/Buffer.h"
 
 #include "Engine/Renderer/Texture.h"
 #include "Engine/Renderer/Shader.h"

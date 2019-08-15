@@ -124,7 +124,6 @@
     <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
     <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLVertexBuffer.cpp" />
     <ClCompile Include="Src\Engine\Renderer\Texture.cpp" />
     <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="Src\Engine\Renderer\Shader.cpp" />
