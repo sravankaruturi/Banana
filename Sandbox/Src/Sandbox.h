@@ -2,18 +2,23 @@
 #include "Engine.h"
 #include "Engine/Core/Layers/ImGui/ImGuiLayer.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 class EditorLayer : public ee::Layer
 {
 
 private:
 	float m_ClearColour[4];
+	glm::vec4 m_TriangleColour;
+	
 	std::unique_ptr<ee::re::VertexBuffer> m_Vb;
 	std::unique_ptr<ee::re::IndexBuffer> m_Ib;
 	std::unique_ptr<ee::re::Shader> m_Shader;
 	
 public:
 	EditorLayer()
-		: m_ClearColour{0.2f, 0.2f, 0.8f, 1.0f}
+		: m_ClearColour{0.2f, 0.2f, 0.8f, 1.0f}, m_TriangleColour{0.8f, 0.2f, 0.3f, 1.0f}
 	{
 		
 	}

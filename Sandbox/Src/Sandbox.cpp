@@ -44,6 +44,10 @@ void EditorLayer::OnUpdate()
 {
 	ee::re::Renderer::Clear(m_ClearColour[0], m_ClearColour[1], m_ClearColour[2], m_ClearColour[3]);
 
+	ee::re::UniformBufferDeclaration <sizeof(glm::vec4 ), 1> bufferVar;
+	bufferVar.Push("u_Colour", m_TriangleColour);
+	m_Shader->UploadUniformBuffer(bufferVar);
+	
 	m_Shader->Bind();
 	m_Vb->Bind();
 	m_Ib->Bind();
@@ -59,6 +63,7 @@ void EditorLayer::OnImGuiRender()
 
 	ImGui::Begin("GameLayer");
 	ImGui::ColorEdit4("Clear Color", m_ClearColour);
+	ImGui::ColorEdit4("Triangle Color", glm::value_ptr(m_TriangleColour));
 	ImGui::End();
 
 #if ENABLE_DOCKSPACE

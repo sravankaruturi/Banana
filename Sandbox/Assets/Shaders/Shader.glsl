@@ -11,9 +11,11 @@ void main()
 #type fragment
 #version 430
 
+uniform vec4 u_Colour;
+
 layout(location = 0) out vec4 finalColor;
 
 void main()
 {
-	finalColor = vec4(0.8, 1.0, 0.2, 1.0);
+	finalColor = vec4(u_Colour);
 } 

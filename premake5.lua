@@ -55,7 +55,7 @@ project "Engine"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
-		"%{prj.name}/Vendor/stb/include"
+	"%{prj.name}/Vendor/stb/include"
     }
 
     links{

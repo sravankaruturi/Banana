@@ -139,4 +139,65 @@ namespace ee::re
 
 		return GL_NONE;
 	}
+
+	void OpenGLShader::UploadUniformBuffer(const UniformBufferBase& uniformBuffer)
+	{
+
+		for (euint i = 0; i < uniformBuffer.GetUniformCount(); i++) {
+
+			const UniformDecl& decl = uniformBuffer.GetUniforms()[i];
+			switch (decl.type)
+			{
+
+			case UniformType::Float: {
+				const std::string& name = decl.name;
+				float value = *(float*)(uniformBuffer.GetBuffer() + decl.offset);
+				EE_RENDER_S2(name, value, {
+					self->UploadUniformFloat(name, value);
+					});
+				break;
+			}
+
+			case UniformType::Float4:
+			{
+				const std::string& name = decl.name;
+				glm::vec4& values = *(glm::vec4*)(uniformBuffer.GetBuffer() + decl.offset);
+				EE_RENDER_S2(name, values, { 
+					self->UploadUniformFloat4(name, values);
+				});
+				break;
+			}
+				
+
+			default:
+				EE_CORE_WARN("Type, is not implemented");
+				break;
+			}
+
+		}
+
+	}
+
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
+	{
+		PE_GL(glUseProgram(m_RendererID));
+		PE_GL(glUniform1f(glGetUniformLocation(m_RendererID, name.c_str()), value));
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
+	{
+
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
+	{
+
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
+	{
+		PE_GL(glUseProgram(m_RendererID));
+		PE_GL(glUniform4f(glGetUniformLocation(m_RendererID, name.c_str()), value.x, value.y, value.z, value.w));
+	}
+
 }

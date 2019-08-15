@@ -123,7 +123,7 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 		typename ::std::remove_const<typename ::std::remove_reference<decltype(arg1)>::type>::type arg1;\
     };\
 	{\
-		auto mem = ::Hazel::Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
+		auto mem = ::ee::re::Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
 		new (mem) EE_RENDER_UNIQUE(EERenderCommand)(arg0, arg1);\
 	}\
 
@@ -148,7 +148,7 @@ For example, a Call at line 52 would create a new struct, EERenderCommand52 and 
 		typename ::std::remove_const<typename ::std::remove_reference<decltype(arg2)>::type>::type arg2;\
     };\
 	{\
-		auto mem = ::Hazel::Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
+		auto mem = ::ee::re::Renderer::Submit(EE_RENDER_UNIQUE(EERenderCommand)::Execute, sizeof(EE_RENDER_UNIQUE(EERenderCommand)));\
 		new (mem) EE_RENDER_UNIQUE(EERenderCommand)(arg0, arg1, arg2);\
 	}\
 
