@@ -26,6 +26,8 @@ namespace ee
 
 	public:
 
+		std::string OpenFile(const std::string& filter) const;
+		
 		inline Window& GetWindow() { return *m_Window; }
 		static inline Application& GetInstance() { return *s_Instance; }
 

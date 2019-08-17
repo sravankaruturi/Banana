@@ -1,14 +1,25 @@
 ﻿#pragma once
+#include <stdint.h>
 
 namespace ee :: re
 {
 
-	using RendererID = unsigned int;
+	using RendererID = uint32_t;
 
 	enum class RendererAPIType
 	{
 		None,
 		OpenGL
+	};
+
+	struct RenderAPICapabilities
+	{
+		std::string Vendor;
+		std::string Renderer;
+		std::string Version;
+
+		int MaxSamples;
+		float MaxAnisotropy;
 	};
 	
 	class RendererAPI
@@ -21,10 +32,16 @@ namespace ee :: re
 		static void Clear(float r, float g, float b, float a);
 		static void SetClearColour(float r, float g, float b, float a);
 
+		static void DrawIndexed(euint count, bool depthTest = true);
+
+		static RenderAPICapabilities& GetCapabilities()
+		{
+			static RenderAPICapabilities capabilities;
+			return capabilities;
+		}
+		
 		static void Init();
 		static void Shutdown();
-
-		static void DrawIndexed(unsigned int count);
 
 		static RendererAPIType Current() { return s_CurrentRendererAPI; }
 

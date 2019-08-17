@@ -25,7 +25,7 @@ namespace ee
 			static void Clear(float r, float g, float b, float a = 1.f);
 			static void SetClearColour(float r, float g, float b, float a);
 
-			static void DrawIndexed(euint count);
+			static void DrawIndexed(euint count, bool depthTest = true);
 
 			static void ClearMagenta();
 

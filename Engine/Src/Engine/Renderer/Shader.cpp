@@ -5,17 +5,24 @@
 
 namespace ee::re
 {
+
+	std::vector<Shader*> Shader::s_AllShaders;
 	
 	Shader* Shader::Create(const std::string& filePath)
 	{
+
+		Shader* result = nullptr;
+		
 		switch (RendererAPI::Current())
 		{
 		case RendererAPIType::None:
 			return nullptr;
 		case RendererAPIType::OpenGL:
-			return new OpenGLShader(filePath);
+			result = new OpenGLShader(filePath);
 		}
-		return nullptr;
+
+		s_AllShaders.push_back(result);
+		return result;
 	}
 
 }

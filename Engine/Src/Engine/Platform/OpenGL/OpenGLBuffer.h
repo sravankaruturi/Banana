@@ -42,6 +42,7 @@ namespace ee::re
 		virtual void Bind() const override;
 
 		[[nodiscard]] virtual euint GetSize() const override { return m_Size; };
+		[[nodiscard]] virtual euint GetCount() const override { return m_Size / (sizeof(euint)); }
 		[[nodiscard]] virtual RendererID GetRendererID() const override { return m_RendererID; };
 
 		virtual void UnBind() const override;

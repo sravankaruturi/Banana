@@ -1,16 +1,29 @@
 ﻿#include "eepch.h"
-
 #include "OpenGLShader.h"
 
 namespace ee::re
 {
 
+#define UNIFORM_LOGGING 0
+#if UNIFORM_LOGGING
+#define EE_LOG_UNIFORM(...) EE_CORE_WARN(__VA_ARGS__)
+#else
+#define EE_LOG_UNIFORM  
+#endif
+
 	void OpenGLShader::ReadShaderFromFile(const std::string& filePath)
 	{
-		std::ifstream in(filePath, std::ios::in | std::ios::binary);
-		if (!in)
+		std::ifstream in;
+
+		std::ios_base::iostate exceptionMask = in.exceptions() | std::ios::failbit;
+		in.exceptions(exceptionMask);
+
+		try
 		{
-			EE_CORE_WARN("Could not read the shader at file: {0}", filePath);
+			in.open(filePath, std::ios::in | std::ios::binary);
+		}catch (std::ios_base::failure& e)
+		{
+			EE_CORE_WARN("Could not read the shader at file: {0}, Error is {1}, Errno: {2}", filePath, e.what(), errno);
 			return;
 		}
 
@@ -107,15 +120,42 @@ namespace ee::re
 		
 		m_RendererID = program;
 
+		// Bind default texture unit
+		UploadUniformInt("u_Texture", 0);
+
+		// PBR shader textures
+		UploadUniformInt("u_AlbedoTexture", 1);
+		UploadUniformInt("u_NormalTexture", 2);
+		UploadUniformInt("u_MetalnessTexture", 3);
+		UploadUniformInt("u_RoughnessTexture", 4);
+
+		UploadUniformInt("u_EnvRadianceTex", 10);
+		UploadUniformInt("u_EnvIrradianceTex", 11);
+
+		UploadUniformInt("u_BRDFLUTTexture", 15);
+
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filePath)
+		: m_AssetPath(filePath)
 	{
-		ReadShaderFromFile(filePath);
+
+		auto found = filePath.find_last_of("/\\");
+		m_Name = (found != std::string::npos ? filePath.substr(found + 1) : filePath);
+		Reload();
+		
+	}
+
+	void OpenGLShader::Reload()
+	{
+		ReadShaderFromFile(m_AssetPath);
 		EE_RENDER_S({
+			if ( self->m_RendererID)
+			{
+				glDeleteShader(self->m_RendererID);
+			}
 			self->CompileAndUploadShader();
 			});
-		
 	}
 
 	void OpenGLShader::Bind()
@@ -140,6 +180,26 @@ namespace ee::re
 		return GL_NONE;
 	}
 
+
+	void OpenGLShader::SetFloat(const std::string& name, float value)
+	{
+		EE_RENDER_S2(name, value, {
+			self->UploadUniformFloat(name, value);
+			});
+	}
+
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+	{
+		EE_RENDER_S2(name, value, {
+			self->UploadUniformMat4(name, value);
+			});
+	}
+
+	const std::string& OpenGLShader::GetName() const
+	{
+		return this->m_Name;
+	}
+
 	void OpenGLShader::UploadUniformBuffer(const UniformBufferBase& uniformBuffer)
 	{
 
@@ -158,6 +218,16 @@ namespace ee::re
 				break;
 			}
 
+			case UniformType::Float3:
+			{
+				const std::string& name = decl.name;
+				glm::vec3& values = *(glm::vec3*)(uniformBuffer.GetBuffer() + decl.offset);
+				EE_RENDER_S2(name, values, {
+					self->UploadUniformFloat3(name, values);
+					});
+				break;
+			}
+
 			case UniformType::Float4:
 			{
 				const std::string& name = decl.name;
@@ -165,6 +235,16 @@ namespace ee::re
 				EE_RENDER_S2(name, values, { 
 					self->UploadUniformFloat4(name, values);
 				});
+				break;
+			}
+
+			case UniformType::Matrix4x4:
+			{
+				const std::string& name = decl.name;
+				glm::mat4& values = *(glm::mat4*)(uniformBuffer.GetBuffer() + decl.offset);
+				EE_RENDER_S2(name, values, {
+					self->UploadUniformMat4(name, values);
+					});
 				break;
 			}
 				
@@ -178,26 +258,87 @@ namespace ee::re
 
 	}
 
+	void OpenGLShader::UploadUniformInt(const std::string& name, float value)
+	{
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if ( location != -1)
+		{
+			glUniform1i(location, value);
+		}else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
+	}
+
 	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
 	{
-		PE_GL(glUseProgram(m_RendererID));
-		PE_GL(glUniform1f(glGetUniformLocation(m_RendererID, name.c_str()), value));
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location != -1)
+		{
+			glUniform1f(location, value);
+		}
+		else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
 	}
 
 	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
 	{
-
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location != -1)
+		{
+			glUniform2f(location, value.x, value.y);
+		}
+		else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
 	}
 
 	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
 	{
-
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location != -1)
+		{
+			glUniform3f(location, value.x, value.y, value.z);
+		}
+		else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
 	}
 
 	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
 	{
-		PE_GL(glUseProgram(m_RendererID));
-		PE_GL(glUniform4f(glGetUniformLocation(m_RendererID, name.c_str()), value.x, value.y, value.z, value.w));
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location != -1)
+		{
+			glUniform4f(location, value.x, value.y, value.z, value.w);
+		}
+		else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
+	}
+
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& value)
+	{
+		glUseProgram(m_RendererID);
+		auto location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location != -1)
+		{
+			glUniformMatrix4fv(location, 1, GL_FALSE, (const float*)&value);
+		}
+		else
+		{
+			EE_LOG_UNIFORM("Uniform, {0} not found", name);
+		}
 	}
 
 }

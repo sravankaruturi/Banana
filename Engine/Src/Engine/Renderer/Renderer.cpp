@@ -32,9 +32,12 @@ namespace ee::re
 		EE_RENDER({ RendererAPI::Init(); });
 	}
 
-	void Renderer::DrawIndexed(euint count)
+	void Renderer::DrawIndexed(euint count, bool depthTest)
 	{
-		EE_RENDER_1(count, { RendererAPI::DrawIndexed(count); });
+		EE_RENDER_2(
+			count, depthTest,
+			{ RendererAPI::DrawIndexed(count, depthTest); }
+		);
 	}
 
 	void ::ee::re::Renderer::WaitAndRender()

@@ -43,6 +43,9 @@ namespace ee {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
+		ImFont* pFont = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+		io.FontDefault = io.Fonts->Fonts.back();
+		
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
 		//ImGui::StyleColorsClassic();
@@ -54,6 +57,9 @@ namespace ee {
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
+
+		const float colourFloat = 0.25f;
+		style.Colors[ImGuiCol_WindowBg] = ImVec4(colourFloat, colourFloat, colourFloat, style.Colors[ImGuiCol_WindowBg].w);
 
 		auto& app = Application::GetInstance();
 		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());

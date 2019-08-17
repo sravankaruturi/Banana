@@ -10,6 +10,9 @@
     <Filter Include="Engine\Core\Events">
       <UniqueIdentifier>{97E562D1-83C9-2327-EC29-1E7AD82C0EA9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Input">
+      <UniqueIdentifier>{52FF8CC8-BE15-8B5E-078D-168073E25BE6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Core\Layers">
       <UniqueIdentifier>{72D045E0-5EB4-0636-C714-0189B317F1B7}</UniqueIdentifier>
     </Filter>
@@ -27,6 +30,9 @@
     </Filter>
     <Filter Include="Engine\Renderer">
       <UniqueIdentifier>{E1119970-4D9D-0635-56AE-8929C2B86235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Vendor">
+      <UniqueIdentifier>{B8852D60-2446-A996-ED80-F2135900EE72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +55,12 @@
     <ClInclude Include="Src\Engine\Core\Events\MouseEvent.h">
       <Filter>Engine\Core\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Input\Input.h">
+      <Filter>Engine\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Core\Input\KeyCodes.h">
+      <Filter>Engine\Core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Engine\Core\Layers\ImGui\ImGuiLayer.h">
       <Filter>Engine\Core\Layers\ImGui</Filter>
     </ClInclude>
@@ -70,24 +82,55 @@
     <ClInclude Include="Src\Engine\EntryPoint.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLFrameBuffer.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Engine\Platform\Windows\WindowsWindow.h">
       <Filter>Engine\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Buffer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Camera.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\FrameBuffer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Mesh.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h">
+      <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Src\Engine\Renderer\Renderer.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\RendererAPI.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Shader.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Renderer\Texture.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Src\eepch.h" />
-    <ClInclude Include="Src\Engine\Core\Input\Input.h" />
-    <ClInclude Include="Src\Engine\Platform\Windows\WindowInput.h" />
-    <ClInclude Include="Src\Engine\Renderer\RendererAPI.h" />
-    <ClInclude Include="Src\Engine\Renderer\RenderCommandQueue.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h" />
-    <ClInclude Include="Src\Engine\Renderer\Texture.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLTexture.h" />
-    <ClInclude Include="Src\Engine\Renderer\Shader.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="Src\Engine\Renderer\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Engine\Core\Application.cpp">
@@ -114,24 +157,54 @@
     <ClCompile Include="Src\Engine\Core\Window.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLFrameBuffer.cpp">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>Engine\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp">
+      <Filter>Engine\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Engine\Platform\Windows\WindowsWindow.cpp">
       <Filter>Engine\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Buffer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Camera.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\FrameBuffer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Mesh.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp">
+      <Filter>Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Src\Engine\Renderer\Renderer.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Shader.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Renderer\Texture.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Vendor\stb_image.cpp">
+      <Filter>Engine\Vendor</Filter>
+    </ClCompile>
     <ClCompile Include="Src\eepch.cpp" />
-    <ClCompile Include="Src\Engine\Platform\Windows\WindowInput.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\RenderCommandQueue.cpp" />
-    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\Texture.cpp" />
-    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLTexture.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\Shader.cpp" />
-    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="Src\Engine\Renderer\Buffer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

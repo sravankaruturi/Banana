@@ -17,6 +17,8 @@ IncludeDir["ImGui"]     = "Vendor/ImGui"
 IncludeDir["glm"]       = "Vendor/glm"
 IncludeDir["spdlog"]    = "Vendor/spdlog/include"
 IncludeDir["gtest"]     = "Vendor/googletest/googletest/include"
+IncludeDir["assimp"]     = "Vendor/assimp/include"
+IncludeDir["stb"]		= "Vendor/stb/include"
 
 group "Dependencies"
 include "Vendor/googletest/googletest"
@@ -55,7 +57,9 @@ project "Engine"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
-	"%{prj.name}/Vendor/stb/include"
+		"%{IncludeDir.assimp}",
+		"%{IncludeDir.stb}",
+		"Vendor/stb/include",
     }
 
     links{
@@ -63,6 +67,7 @@ project "Engine"
         "Glad",
         "ImGui",
         "GoogleTest",
+		"Vendor/assimp/Debug-lib/assimp-vc142-mt.lib",
         "opengl32.lib"
     }
 
@@ -112,7 +117,8 @@ project "Sandbox"
         "%{IncludeDir.glm}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.gtest}"
+        "%{IncludeDir.gtest}",
+		"%{IncludeDir.stb}"
     }
 
     links{

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Event.h"
+#include "Engine/Core/Input/KeyCodes.h"
 
 #include <sstream>
 

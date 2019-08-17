@@ -15,6 +15,9 @@
 #include <functional>
 #include <algorithm>
 #include <limits>
+#include <string>
+
+#include <memory>
 
 #include <Engine/Core/Core.h>
 #include <Engine/Core/Log.h>

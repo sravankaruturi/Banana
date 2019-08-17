@@ -7,6 +7,8 @@
 namespace ee::in
 {
 
+	Input* Input::s_Instance = new WindowInput;
+	
 	bool WindowInput::IsKeyPressedImpl(int keycode)
 	{
 		auto& window = static_cast<WindowsWindow&>(Application::GetInstance().GetWindow());

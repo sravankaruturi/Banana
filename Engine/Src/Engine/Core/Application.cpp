@@ -2,7 +2,14 @@
 #include "Application.h"
 
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/FrameBuffer.h"
 #include <GLFW/glfw3.h>
+
+#include <imgui.h>
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#include <Windows.h>
 
 namespace ee
 {
@@ -29,10 +36,19 @@ namespace ee
 	void Application::RenderImGui()
 	{
 		m_ImGuiLayer->Begin();
+
+		ImGui::Begin("Renderer");
+		auto& caps = re::RendererAPI::GetCapabilities();
+		ImGui::Text("Vendor %s", caps.Vendor.c_str());
+		ImGui::Text("Renderer %s", caps.Renderer.c_str());
+		ImGui::Text("Version %s", caps.Version.c_str());
+		ImGui::End();
+		
 		for(auto it : m_LayerStack)
 		{
 			it->OnImGuiRender();
 		}
+		
 		m_ImGuiLayer->End();
 	}
 
@@ -65,7 +81,19 @@ namespace ee
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		EE_CORE_INFO("Window Resize: {0}, {1}", e.GetWidth(), e.GetHeight());
+
+		int width = e.GetWidth();
+		int height = e.GetHeight();
+
+		EE_RENDER_2(width, height, { glViewport(0, 0, width, height); });
+
+		auto& fbs = re::FrameBufferPool::GetGlobal()->GetAll();
+
+		for(auto& fb: fbs)
+		{
+			fb->Resize(width, height);
+		}
+		
 		return false;
 	}
 
@@ -74,6 +102,32 @@ namespace ee
 		EE_CORE_INFO("Window Closed");
 		m_Running = false;
 		return true;
+	}
+
+	std::string Application::OpenFile(const std::string& filter) const
+	{
+		OPENFILENAMEA ofn;
+		CHAR szFile[260] = { 0 };
+
+		ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = glfwGetWin32Window((GLFWwindow*)m_Window->GetNativeWindow());
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = "All\0*.*\0";
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+		if ( GetOpenFileNameA(&ofn) == true)
+		{
+			return ofn.lpstrFile;
+		}
+
+		return std::string();
+		
 	}
 
 

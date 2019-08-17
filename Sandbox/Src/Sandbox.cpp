@@ -16,23 +16,54 @@ static void ImGuiShowHelpMarker(const char* desc)
 
 void EditorLayer::OnAttach()
 {
-	static float vertices[] = {
-		-0.5f, -0.5f, +0.0f,
-		+0.5f, -0.5f, +0.0f,
-		+0.0f, +0.5f, +0.0f
+	m_SimplePBRShader.reset(ee::re::Shader::Create("Assets/Shaders/simplepbr.glsl"));
+	m_QuadShader.reset(ee::re::Shader::Create("Assets/Shaders/quad.glsl"));
+	m_HDRShader.reset(ee::re::Shader::Create("Assets/Shaders/hdr.glsl"));
+	
+	m_Mesh.reset(new ee::re::Mesh("Assets/Meshes/cerberus.fbx"));
+	m_SphereMesh.reset(new ee::re::Mesh("Assets/Models/Sphere.fbx"));
+
+	m_CheckerBoardTex.reset(ee::re::Texture2D::Create("Assets/Editor/Checkerboard.tga"));
+
+	m_EnvironmentCubeMap.reset(ee::re::TextureCube::Create("Assets/Textures/Environments/Arches_E_PineTree_Radiance.tga"));
+	m_EnvironmentIrradiance.reset(ee::re::TextureCube::Create("Assets/Textures/Environments/Arches_E_PineTree_Irradiance.tga"));
+	m_BRDFLUT.reset(ee::re::Texture2D::Create("Assets/Textures/BRDF_LUT.tga"));
+
+	m_FrameBuffer.reset(ee::re::FrameBuffer::Create(1280, 720, ee::re::FrameBufferFormat::RGBA16F));
+	m_FinalPresentBuffer.reset(ee::re::FrameBuffer::Create(1280, 720, ee::re::FrameBufferFormat::RGBA8));
+
+	float x = -1, y = -1;
+	float width = 2, height = 2;
+	struct QuadVertex
+	{
+		glm::vec3 Position;
+		glm::vec2 TexCoord;
 	};
 
-	static euint indices[] = {
-		0, 1, 2
-	};
+	QuadVertex* data = new QuadVertex[4];
 
-	m_Vb = std::unique_ptr<ee::re::VertexBuffer>(ee::re::VertexBuffer::Create());
-	m_Vb->SetData(vertices, sizeof(vertices));
 
-	m_Ib = std::unique_ptr<ee::re::IndexBuffer>(ee::re::IndexBuffer::Create());
-	m_Ib->SetData(indices, sizeof(indices));
+	data[0].Position = glm::vec3(x, y, 0);
+	data[0].TexCoord = glm::vec2(0, 0);
 
-	m_Shader.reset(ee::re::Shader::Create("Assets/Shaders/Shader.glsl"));
+	data[1].Position = glm::vec3(x + width, y, 0);
+	data[1].TexCoord = glm::vec2(1, 0);
+
+	data[2].Position = glm::vec3(x + width, y + height, 0);
+	data[2].TexCoord = glm::vec2(1, 1);
+
+	data[3].Position = glm::vec3(x, y + height, 0);
+	data[3].TexCoord = glm::vec2(0, 1);
+
+	m_VertexBuffer.reset(ee::re::VertexBuffer::Create());
+	m_VertexBuffer->SetData(data, 4 * sizeof(QuadVertex));
+
+	uint32_t* indices = new uint32_t[6]{ 0, 1, 2, 3, 0, 2};
+	m_IndexBuffer.reset(ee::re::IndexBuffer::Create());
+	m_IndexBuffer->SetData(indices, 6 * sizeof(uint32_t));
+
+	m_Light.Direction = { -0.5f, -0.5f, 1.0f };
+	m_Light.Radiance = { 1, 1, 1 };
 
 }
 
@@ -42,31 +73,109 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate()
 {
-	ee::re::Renderer::Clear(m_ClearColour[0], m_ClearColour[1], m_ClearColour[2], m_ClearColour[3]);
 
-	ee::re::UniformBufferDeclaration <sizeof(glm::vec4 ), 1> bufferVar;
-	bufferVar.Push("u_Colour", m_TriangleColour);
-	m_Shader->UploadUniformBuffer(bufferVar);
+	using namespace ee::re;
+	using namespace glm;
+
+	m_Camera.Update();
+	auto viewProjection = m_Camera.GetProjcetionMatrix() * m_Camera.GetViewMatrix();
+
+	m_FrameBuffer->Bind();
+	Renderer::Clear(m_ClearColour[0], m_ClearColour[1], m_ClearColour[2], m_ClearColour[3]);
+
+	UniformBufferDeclaration< sizeof(mat4), 1 > quadShaderUB;
+	quadShaderUB.Push("u_InverseVP", inverse(viewProjection));
+	m_QuadShader->UploadUniformBuffer(quadShaderUB);
+
+	m_QuadShader->Bind();
+	m_EnvironmentIrradiance->Bind(0);
+	m_VertexBuffer->Bind();
+	m_IndexBuffer->Bind();
+	Renderer::DrawIndexed(m_IndexBuffer->GetCount(), false);
+
+	UniformBufferDeclaration<sizeof(mat4) * 2 + sizeof(vec3) * 4 + sizeof(float) * 8, 14> simplePbrShaderUB;
+	simplePbrShaderUB.Push("u_ViewProjectionMatrix", viewProjection);
+	simplePbrShaderUB.Push("u_ModelMatrix", mat4(1.0f));
+	simplePbrShaderUB.Push("u_AlbedoColor", m_AlbedoInput.Colour);
+	simplePbrShaderUB.Push("u_Metalness", m_MetalnessInput.Value);
+	simplePbrShaderUB.Push("u_Roughness", m_RoughnessInput.Value);
+	simplePbrShaderUB.Push("lights.Direction", m_Light.Direction);
+	simplePbrShaderUB.Push("lights.Radiance", m_Light.Radiance * m_LightMultiplier);
+	simplePbrShaderUB.Push("u_CameraPosition", m_Camera.GetPosition());
+	simplePbrShaderUB.Push("u_RadiancePrefilter", m_RadiancePreFilter ? 1.0f: 0.0f);
+	simplePbrShaderUB.Push("u_AlbedoTexToggle", m_AlbedoInput.UseTexture ? 1.0f: 0.0f);
+	simplePbrShaderUB.Push("u_NormalTexToggle", m_NormalInput.UseTexture ? 1.0f : 0.0f);
+	simplePbrShaderUB.Push("u_MetalnessTexToggle", m_MetalnessInput.UseTexture ? 1.0f : 0.0f);
+	simplePbrShaderUB.Push("u_RoughnessTexToggle", m_RoughnessInput.UseTexture ? 1.0f : 0.0f);
+	simplePbrShaderUB.Push("u_EnvMapRotation", m_EnvMapRotation);
+	m_SimplePBRShader->UploadUniformBuffer(simplePbrShaderUB);
+
+	m_EnvironmentCubeMap->Bind(10);
+	m_EnvironmentIrradiance->Bind(11);
+	m_BRDFLUT->Bind(15);
+
+	m_SimplePBRShader->Bind();
+	if (m_AlbedoInput.TextureMap)
+		m_AlbedoInput.TextureMap->Bind(1);
+	if (m_NormalInput.TextureMap)
+		m_NormalInput.TextureMap->Bind(2);
+	if (m_MetalnessInput.TextureMap)
+		m_MetalnessInput.TextureMap->Bind(3);
+	if (m_RoughnessInput.TextureMap)
+		m_RoughnessInput.TextureMap->Bind(4);
+
+	if (m_Scene == Scene::Spheres)
+	{
+		// Metals
+		float roughness = 0.0f;
+		float x = -88.0f;
+		for (int i = 0; i < 8; i++)
+		{
+			m_SimplePBRShader->SetMat4("u_ModelMatrix", translate(mat4(1.0f), vec3(x, 0.0f, 0.0f)));
+			m_SimplePBRShader->SetFloat("u_Roughness", roughness);
+			m_SimplePBRShader->SetFloat("u_Metalness", 1.0f);
+			m_SphereMesh->Render();
+
+			roughness += 0.15f;
+			x += 22.0f;
+		}
+
+		// Dielectrics
+		roughness = 0.0f;
+		x = -88.0f;
+		for (int i = 0; i < 8; i++)
+		{
+			m_SimplePBRShader->SetMat4("u_ModelMatrix", translate(mat4(1.0f), vec3(x, 22.0f, 0.0f)));
+			m_SimplePBRShader->SetFloat("u_Roughness", roughness);
+			m_SimplePBRShader->SetFloat("u_Metalness", 0.0f);
+			m_SphereMesh->Render();
+
+			roughness += 0.15f;
+			x += 22.0f;
+		}
+
+	}
+	else if (m_Scene == Scene::Model)
+	{
+		m_Mesh->Render();
+	}
+
+	m_FrameBuffer->Unbind();
+
+	m_FinalPresentBuffer->Bind();
+	m_HDRShader->Bind();
+	m_HDRShader->SetFloat("u_Exposure", m_Exposure);
+	m_FrameBuffer->BindTexture();
+	m_VertexBuffer->Bind();
+	m_IndexBuffer->Bind();
+	Renderer::DrawIndexed(m_IndexBuffer->GetCount(), false);
+
+	m_FinalPresentBuffer->Unbind();
 	
-	m_Shader->Bind();
-	m_Vb->Bind();
-	m_Ib->Bind();
-	ee::re::Renderer::DrawIndexed(3);
 }
 
 void EditorLayer::OnImGuiRender()
 {
-
-	static bool show_demo_window = true;
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
-	ImGui::Begin("GameLayer");
-	ImGui::ColorEdit4("Clear Color", m_ClearColour);
-	ImGui::ColorEdit4("Triangle Color", glm::value_ptr(m_TriangleColour));
-	ImGui::End();
-
-#if ENABLE_DOCKSPACE
 	static bool p_open = true;
 
 	static bool opt_fullscreen_persistant = true;
@@ -107,6 +216,219 @@ void EditorLayer::OnImGuiRender()
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
 	}
 
+	/*
+	 * Editor Panel
+	 */
+	ImGui::Begin("Settings");
+	ImGui::Separator();
+	ImGui::RadioButton("Spheres", (int*)& m_Scene, (int)Scene::Spheres);
+	ImGui::SameLine();
+	ImGui::RadioButton("Model", (int*)& m_Scene, (int)Scene::Model);
+
+	ImGui::Separator();
+	ImGui::ColorEdit4("Clear Colour", m_ClearColour);
+
+	ImGui::SliderFloat3("Light Dir", glm::value_ptr(m_Light.Direction), -1, 1);
+	ImGui::ColorEdit3("Light Radiance", glm::value_ptr(m_Light.Radiance));
+	ImGui::SliderFloat("Light Multiplier", &m_LightMultiplier, 0.0f, 5.0f);
+	ImGui::SliderFloat("Exposure", &m_Exposure, 0.0f, 10.0f);
+
+	auto cameraForward = m_Camera.GetForwardDirection();
+	ImGui::Text("Camera Forward: %.2f, %.2f, %.2f", cameraForward.x, cameraForward.y, cameraForward.z);
+
+	ImGui::Separator();
+	{
+		ImGui::Text("Mesh");
+		std::string fullPath = m_Mesh ? m_Mesh->GetFilePath() : "None";
+		auto found = fullPath.find_last_of("/\\");
+		std::string path = (found != std::string::npos ? fullPath.substr(found + 1) : fullPath);
+		ImGui::Text(path.c_str());
+		ImGui::SameLine();
+		if ( ImGui::Button("...##Mesh"))
+		{
+			std::string filename = ee::Application::GetInstance().OpenFile("");
+			if ( filename != "")
+			{
+				m_Mesh.reset(new ee::re::Mesh(filename));
+			}
+		}
+	}
+
+	ImGui::Separator();
+	
+	if ( ImGui::TreeNode("Shaders"))
+	{
+		auto& shaders = ee::re::Shader::s_AllShaders;
+		for(auto& shader: shaders)
+		{
+			if ( ImGui::TreeNode(shader->GetName().c_str()))
+			{
+				std::string buttonName = "Reload##" + shader->GetName();
+				if ( ImGui::Button(buttonName.c_str()))
+				{
+					shader->Reload();
+				}
+				ImGui::TreePop();
+			}
+		}
+		ImGui::TreePop();
+	}
+
+	ImGui::Separator();
+
+	ImGui::Text("Shader Parameters");
+	ImGui::Checkbox("Radiance Prefiltering", &m_RadiancePreFilter);
+	ImGui::SliderFloat("Env Map Rotation", &m_EnvMapRotation, -360.f, 360.f);
+	ImGui::Separator();
+
+	/* Textures */
+	{
+		/* Albedo */
+		if (ImGui::CollapsingHeader("Albedo", nullptr, ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+			ImGui::Image(m_AlbedoInput.TextureMap ? (void*)m_AlbedoInput.TextureMap->GetRendererID() : (void*)m_CheckerBoardTex->GetRendererID(), ImVec2(64, 64));
+			ImGui::PopStyleVar();
+			if (ImGui::IsItemHovered())
+			{
+				if (m_AlbedoInput.TextureMap)
+				{
+					ImGui::BeginTooltip();
+					ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+					ImGui::TextUnformatted(m_AlbedoInput.TextureMap->GetPath().c_str());
+					ImGui::PopTextWrapPos();
+					ImGui::Image((void*)m_AlbedoInput.TextureMap->GetRendererID(), ImVec2(384, 384));
+					ImGui::EndTooltip();
+				}
+				if (ImGui::IsItemClicked())
+				{
+					std::string filename = ee::Application::GetInstance().OpenFile("");
+					if (filename != "")
+						m_AlbedoInput.TextureMap.reset(ee::re::Texture2D::Create(filename, m_AlbedoInput.SRGB));
+				}
+			}
+			ImGui::SameLine();
+			ImGui::BeginGroup();
+			ImGui::Checkbox("Use##AlbedoMap", &m_AlbedoInput.UseTexture);
+			if (ImGui::Checkbox("sRGB##AlbedoMap", &m_AlbedoInput.SRGB))
+			{
+				if (m_AlbedoInput.TextureMap)
+					m_AlbedoInput.TextureMap.reset(ee::re::Texture2D::Create(m_AlbedoInput.TextureMap->GetPath(), m_AlbedoInput.SRGB));
+			}
+			ImGui::EndGroup();
+			ImGui::SameLine();
+			ImGui::ColorEdit3("Color##Albedo", glm::value_ptr(m_AlbedoInput.Colour), ImGuiColorEditFlags_NoInputs);
+		}
+	}
+	{
+		// Normals
+		if (ImGui::CollapsingHeader("Normals", nullptr, ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+			ImGui::Image(m_NormalInput.TextureMap ? (void*)m_NormalInput.TextureMap->GetRendererID() : (void*)m_CheckerBoardTex->GetRendererID(), ImVec2(64, 64));
+			ImGui::PopStyleVar();
+			if (ImGui::IsItemHovered())
+			{
+				if (m_NormalInput.TextureMap)
+				{
+					ImGui::BeginTooltip();
+					ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+					ImGui::TextUnformatted(m_NormalInput.TextureMap->GetPath().c_str());
+					ImGui::PopTextWrapPos();
+					ImGui::Image((void*)m_NormalInput.TextureMap->GetRendererID(), ImVec2(384, 384));
+					ImGui::EndTooltip();
+				}
+				if (ImGui::IsItemClicked())
+				{
+					std::string filename = ee::Application::GetInstance().OpenFile("");
+					if (filename != "")
+						m_NormalInput.TextureMap.reset(ee::re::Texture2D::Create(filename));
+				}
+			}
+			ImGui::SameLine();
+			ImGui::Checkbox("Use##NormalMap", &m_NormalInput.UseTexture);
+		}
+	}
+	{
+		// Metalness
+		if (ImGui::CollapsingHeader("Metalness", nullptr, ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+			ImGui::Image(m_MetalnessInput.TextureMap ? (void*)m_MetalnessInput.TextureMap->GetRendererID() : (void*)m_CheckerBoardTex->GetRendererID(), ImVec2(64, 64));
+			ImGui::PopStyleVar();
+			if (ImGui::IsItemHovered())
+			{
+				if (m_MetalnessInput.TextureMap)
+				{
+					ImGui::BeginTooltip();
+					ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+					ImGui::TextUnformatted(m_MetalnessInput.TextureMap->GetPath().c_str());
+					ImGui::PopTextWrapPos();
+					ImGui::Image((void*)m_MetalnessInput.TextureMap->GetRendererID(), ImVec2(384, 384));
+					ImGui::EndTooltip();
+				}
+				if (ImGui::IsItemClicked())
+				{
+					std::string filename = ee::Application::GetInstance().OpenFile("");
+					if (filename != "")
+						m_MetalnessInput.TextureMap.reset(ee::re::Texture2D::Create(filename));
+				}
+			}
+			ImGui::SameLine();
+			ImGui::Checkbox("Use##MetalnessMap", &m_MetalnessInput.UseTexture);
+			ImGui::SameLine();
+			ImGui::SliderFloat("Value##MetalnessInput", &m_MetalnessInput.Value, 0.0f, 1.0f);
+		}
+	}
+	{
+		// Roughness
+		if (ImGui::CollapsingHeader("Roughness", nullptr, ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+			ImGui::Image(m_RoughnessInput.TextureMap ? (void*)m_RoughnessInput.TextureMap->GetRendererID() : (void*)m_CheckerBoardTex->GetRendererID(), ImVec2(64, 64));
+			ImGui::PopStyleVar();
+			if (ImGui::IsItemHovered())
+			{
+				if (m_RoughnessInput.TextureMap)
+				{
+					ImGui::BeginTooltip();
+					ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+					ImGui::TextUnformatted(m_RoughnessInput.TextureMap->GetPath().c_str());
+					ImGui::PopTextWrapPos();
+					ImGui::Image((void*)m_RoughnessInput.TextureMap->GetRendererID(), ImVec2(384, 384));
+					ImGui::EndTooltip();
+				}
+				if (ImGui::IsItemClicked())
+				{
+					std::string filename = ee::Application::GetInstance().OpenFile("");
+					if (filename != "")
+						m_RoughnessInput.TextureMap.reset(ee::re::Texture2D::Create(filename));
+				}
+			}
+			ImGui::SameLine();
+			ImGui::Checkbox("Use##RoughnessMap", &m_RoughnessInput.UseTexture);
+			ImGui::SameLine();
+			ImGui::SliderFloat("Value##RoughnessInput", &m_RoughnessInput.Value, 0.0f, 1.0f);
+		}
+
+	}
+	ImGui::Separator();
+	ImGui::End();
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+	ImGui::Begin("Viewport");
+	auto viewportSize = ImGui::GetContentRegionAvail();
+	m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+	m_FinalPresentBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+	m_Camera.SetProjectionMatrix(
+		glm::perspectiveFov(glm::radians(45.0f), viewportSize.x, viewportSize.y, 0.1f, 10000.0f)
+	);
+	ImGui::Image((void*)m_FinalPresentBuffer->GetColourAttachmentRendererID(), viewportSize, { 0, 1 }, { 1, 0 });
+	ImGui::End();
+	ImGui::PopStyleVar();
+
+	
+	
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("Docking"))
@@ -137,7 +459,6 @@ void EditorLayer::OnImGuiRender()
 	}
 
 	ImGui::End();
-#endif
 
 }
 
