@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Engine/Renderer/Shader.h"
-#include "OpenGL.h"
+#include <glad/glad.h>
 
 namespace ee::re
 {

@@ -4,7 +4,7 @@
 #include "Engine/Renderer/RendererAPI.h"
 #include "Engine/Renderer/Renderer.h"
 
-#include "OpenGL.h"
+#include <glad/glad.h>
 #include <stb_image.h>
 
 namespace ee::re
@@ -111,7 +111,7 @@ namespace ee::re
 		auto self = this;
 		EE_RENDER_1(self,
 			{
-				PE_GL(glDeleteTextures(1, &self->m_RendererID));
+				glDeleteTextures(1, &self->m_RendererID);
 			}
 		);
 	}

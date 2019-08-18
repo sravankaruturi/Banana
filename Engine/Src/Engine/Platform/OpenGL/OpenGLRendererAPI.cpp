@@ -1,7 +1,7 @@
 #include "eepch.h"
 #include "Engine/Renderer/RendererAPI.h"
 
-#include "OpenGL.h"
+#include <glad/glad.h>
 
 namespace ee::re
 {
@@ -50,13 +50,13 @@ namespace ee::re
 
 	void RendererAPI::Clear(float r, float g, float b, float a)
 	{
-		PE_GL(glClearColor(r, g, b, a));
-		PE_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		glClearColor(r, g, b, a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void RendererAPI::SetClearColour(float r, float g, float b, float a)
 	{
-		PE_GL(glClearColor(r, g, b, a));
+		glClearColor(r, g, b, a);
 	}
 
 	void RendererAPI::DrawIndexed(unsigned int count, bool depthTest)

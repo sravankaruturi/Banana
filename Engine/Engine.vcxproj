@@ -156,7 +156,6 @@
     <ClInclude Include="Src\Engine\Core\Platform.h" />
     <ClInclude Include="Src\Engine\Core\Window.h" />
     <ClInclude Include="Src\Engine\EntryPoint.h" />
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h" />
     <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLShader.h" />

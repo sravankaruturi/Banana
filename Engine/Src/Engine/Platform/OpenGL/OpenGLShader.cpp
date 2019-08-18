@@ -8,7 +8,7 @@ namespace ee::re
 #if UNIFORM_LOGGING
 #define EE_LOG_UNIFORM(...) EE_CORE_WARN(__VA_ARGS__)
 #else
-#define EE_LOG_UNIFORM  
+#define EE_LOG_UNIFORM(...) 
 #endif
 
 	void OpenGLShader::ReadShaderFromFile(const std::string& filePath)
@@ -61,61 +61,60 @@ namespace ee::re
 		std::vector<GLuint> shaderRendererIDs;
 
 		GLuint program;
-		PE_GL(program = glCreateProgram());
+		program = glCreateProgram();
 
 		for (auto& kv : shader_sources) {
 
 			GLenum type = kv.first;
 			std::string& source = kv.second;
 
-			GLuint shaderRendererId;
-			PE_GL(shaderRendererId = glCreateShader(type));
+			GLuint shaderRendererId = glCreateShader(type);
 
 			const GLchar* source_cstr = static_cast<const GLchar*>(source.c_str());
-			PE_GL(glShaderSource(shaderRendererId, 1, &source_cstr, 0));
-			PE_GL(glCompileShader(shaderRendererId));
+			glShaderSource(shaderRendererId, 1, &source_cstr, 0);
+			glCompileShader(shaderRendererId);
 
 			GLint isCompiled = 0;
-			PE_GL(glGetShaderiv(shaderRendererId, GL_COMPILE_STATUS, &isCompiled));
+			glGetShaderiv(shaderRendererId, GL_COMPILE_STATUS, &isCompiled);
 
 			if (GL_FALSE == isCompiled){
 				GLint maxLength = 0;
-				PE_GL(glGetShaderiv(shaderRendererId, GL_INFO_LOG_LENGTH, &maxLength));
+				glGetShaderiv(shaderRendererId, GL_INFO_LOG_LENGTH, &maxLength);
 
 				std::vector<GLchar> infolog(maxLength);
-				PE_GL(glGetShaderInfoLog(shaderRendererId, maxLength, &maxLength, &infolog[0]));
+				glGetShaderInfoLog(shaderRendererId, maxLength, &maxLength, &infolog[0]);
 				EE_CORE_ERROR("Shader Compilation Failed: \n {0}", &infolog[0]);
-				PE_GL(glDeleteShader(shaderRendererId));
+				glDeleteShader(shaderRendererId);
 				EE_CORE_ASSERT(false, "Failed");
 
 			}
 
 			shaderRendererIDs.push_back(shaderRendererId);
-			PE_GL(glAttachShader(program, shaderRendererId));
+			glAttachShader(program, shaderRendererId);
 
 		}
 
-		PE_GL(glLinkProgram(program));
+		glLinkProgram(program);
 		GLint isLinked = 0;
-		PE_GL(glGetProgramiv(program, GL_LINK_STATUS, (int*)& isLinked));
+		glGetProgramiv(program, GL_LINK_STATUS, (int*)& isLinked);
 
 		if (GL_FALSE == isLinked) {
 			GLint maxLength = 0;
-			PE_GL(glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength));
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 
 			std::vector<GLchar> infolog(maxLength);
-			PE_GL(glGetProgramInfoLog(program, maxLength, &maxLength, &infolog[0]));
+			glGetProgramInfoLog(program, maxLength, &maxLength, &infolog[0]);
 			EE_CORE_ERROR("Shader Compilation Failed:\n{0}", &infolog[0]);
 
-			PE_GL(glDeleteProgram(program));
+			glDeleteProgram(program);
 
 			for (auto it : shaderRendererIDs) {
-				PE_GL(glDeleteShader(it));
+				glDeleteShader(it);
 			}
 		}
 
 		for (auto it : shaderRendererIDs) {
-			PE_GL(glDetachShader(program, it));
+			glDetachShader(program, it);
 		}
 		
 		m_RendererID = program;
@@ -161,7 +160,7 @@ namespace ee::re
 	void OpenGLShader::Bind()
 	{
 		EE_RENDER_S({
-			PE_GL(glUseProgram(self->m_RendererID));
+			glUseProgram(self->m_RendererID);
 			});
 	}
 

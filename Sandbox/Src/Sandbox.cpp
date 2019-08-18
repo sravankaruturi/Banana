@@ -1,5 +1,4 @@
 ﻿#include "Sandbox.h"
-#define ENABLE_DOCKSPACE 0
 
 static void ImGuiShowHelpMarker(const char* desc)
 {
@@ -180,6 +179,8 @@ enum class PropertyFlag
 	ColourProperty = 1
 };
 
+// TODO: Use a template here to condense these methods.
+
 void Property(const std::string& name, bool& value)
 {
 	ImGui::Text(name.c_str());
@@ -257,6 +258,7 @@ void EditorLayer::OnImGuiRender()
 {
 	static bool p_open = true;
 
+	// TODO: opt_fullscreen seems to be always true. Remove redundant conditionals.
 	static bool opt_fullscreen_persistant = true;
 	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 	bool opt_fullscreen = opt_fullscreen_persistant;
@@ -298,7 +300,7 @@ void EditorLayer::OnImGuiRender()
 	/*
 	 * Editor Panel
 	 */
-	ImGui::Begin("Model");
+	ImGui::Begin("Scene");
 	ImGui::RadioButton("Spheres", (int*)& m_Scene, (int)Scene::Spheres);
 	ImGui::SameLine();
 	ImGui::RadioButton("Model", (int*)& m_Scene, (int)Scene::Model);
@@ -319,8 +321,9 @@ void EditorLayer::OnImGuiRender()
 	ImGui::End();
 
 
-	auto cameraForward = m_Camera.GetForwardDirection();
-	ImGui::Text("Camera Forward: %.2f, %.2f, %.2f", cameraForward.x, cameraForward.y, cameraForward.z);
+	// Not using it anywhere else.
+	//auto cameraForward = m_Camera.GetForwardDirection();
+	//ImGui::Text("Camera Forward: %.2f, %.2f, %.2f", cameraForward.x, cameraForward.y, cameraForward.z);
 
 	ImGui::Separator();
 	{
@@ -335,6 +338,7 @@ void EditorLayer::OnImGuiRender()
 			std::string filename = ee::Application::GetInstance().OpenFile("");
 			if ( filename != "")
 			{
+				// TODO: Check performance benefits for makeunique vs reset(new)
 				m_Mesh.reset(new ee::re::Mesh(filename));
 			}
 		}

@@ -82,9 +82,6 @@
     <ClInclude Include="Src\Engine\EntryPoint.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGL.h">
-      <Filter>Engine\Platform\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Engine\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>Engine\Platform\OpenGL</Filter>
     </ClInclude>
