@@ -81,7 +81,7 @@ void EditorLayer::OnUpdate()
 	auto viewProjection = m_Camera.GetProjcetionMatrix() * m_Camera.GetViewMatrix();
 
 	m_FrameBuffer->Bind();
-	Renderer::Clear(m_ClearColour[0], m_ClearColour[1], m_ClearColour[2], m_ClearColour[3]);
+	Renderer::Clear();
 
 	UniformBufferDeclaration< sizeof(mat4), 1 > quadShaderUB;
 	quadShaderUB.Push("u_InverseVP", inverse(viewProjection));
@@ -174,6 +174,85 @@ void EditorLayer::OnUpdate()
 	
 }
 
+enum class PropertyFlag
+{
+	None = 0,
+	ColourProperty = 1
+};
+
+void Property(const std::string& name, bool& value)
+{
+	ImGui::Text(name.c_str());
+	ImGui::NextColumn();
+	ImGui::PushItemWidth(-1);
+
+	std::string id = "##" + name;
+	ImGui::Checkbox(id.c_str(), &value);
+
+	ImGui::PopItemWidth();
+	ImGui::NextColumn();
+}
+
+void Property(const std::string&name, float& value, float min = -1.0f, float max = 1.0f, PropertyFlag flags = PropertyFlag::None)
+{
+	ImGui::Text(name.c_str());
+	ImGui::NextColumn();
+	ImGui::PushItemWidth(-1);
+
+	std::string id = "##" + name;
+	ImGui::SliderFloat(id.c_str(), &value, min, max);
+
+	ImGui::PopItemWidth();
+	ImGui::NextColumn();
+}
+
+void Property(const std::string&name, glm::vec3& value, float min = -1.0f, float max = 1.0f, PropertyFlag flags = PropertyFlag::None)
+{
+	ImGui::Text(name.c_str());
+	ImGui::NextColumn();
+	ImGui::PushItemWidth(-1);
+
+	std::string id = "##" + name;
+	if ( (int)flags & (int)PropertyFlag::ColourProperty)
+	{
+		ImGui::ColorEdit3(id.c_str(), glm::value_ptr(value), ImGuiColorEditFlags_NoInputs);
+	}else
+	{
+		ImGui::SliderFloat3(id.c_str(), glm::value_ptr(value), min, max);
+	}
+	ImGui::PopItemWidth();
+	ImGui::NextColumn();
+}
+
+void Property(const std::string&name, glm::vec3& value, PropertyFlag flags)
+{
+	Property(name, value, -1, 1, flags);
+}
+
+void Property(const std::string& name, glm::vec4& value, float min = -1.0f, float max = 1.0f, PropertyFlag flags = PropertyFlag::None)
+{
+	ImGui::Text(name.c_str());
+	ImGui::NextColumn();
+	ImGui::PushItemWidth(-1);
+
+	std::string id = "##" + name;
+	if ((int)flags & (int)PropertyFlag::ColourProperty)
+	{
+		ImGui::ColorEdit4(id.c_str(), glm::value_ptr(value), ImGuiColorEditFlags_NoInputs);
+	}
+	else
+	{
+		ImGui::SliderFloat4(id.c_str(), glm::value_ptr(value), min, max);
+	}
+	ImGui::PopItemWidth();
+	ImGui::NextColumn();
+}
+
+void Property(const std::string& name, glm::vec4& value, PropertyFlag flags)
+{
+	Property(name, value, -1, 1, flags);
+}
+
 void EditorLayer::OnImGuiRender()
 {
 	static bool p_open = true;
@@ -219,19 +298,26 @@ void EditorLayer::OnImGuiRender()
 	/*
 	 * Editor Panel
 	 */
-	ImGui::Begin("Settings");
-	ImGui::Separator();
+	ImGui::Begin("Model");
 	ImGui::RadioButton("Spheres", (int*)& m_Scene, (int)Scene::Spheres);
 	ImGui::SameLine();
 	ImGui::RadioButton("Model", (int*)& m_Scene, (int)Scene::Model);
 
-	ImGui::Separator();
-	ImGui::ColorEdit4("Clear Colour", m_ClearColour);
+	ImGui::Begin("Environment");
+	ImGui::Columns(2);
 
-	ImGui::SliderFloat3("Light Dir", glm::value_ptr(m_Light.Direction), -1, 1);
-	ImGui::ColorEdit3("Light Radiance", glm::value_ptr(m_Light.Radiance));
-	ImGui::SliderFloat("Light Multiplier", &m_LightMultiplier, 0.0f, 5.0f);
-	ImGui::SliderFloat("Exposure", &m_Exposure, 0.0f, 10.0f);
+	Property("Light Direction", m_Light.Direction);
+	Property("Light Radiance", m_Light.Radiance);
+	Property("Light Multiplier", m_LightMultiplier, 0.f, 5.f);
+	Property("Exposure", m_Exposure, 0.0f, 5.0f);
+
+	Property("Radiance Prefiltering", m_RadiancePreFilter);
+	Property("Env Map Rotation", m_EnvMapRotation, -360.f, 360.f);
+
+	ImGui::Columns(1);
+
+	ImGui::End();
+
 
 	auto cameraForward = m_Camera.GetForwardDirection();
 	ImGui::Text("Camera Forward: %.2f, %.2f, %.2f", cameraForward.x, cameraForward.y, cameraForward.z);
@@ -274,11 +360,6 @@ void EditorLayer::OnImGuiRender()
 		ImGui::TreePop();
 	}
 
-	ImGui::Separator();
-
-	ImGui::Text("Shader Parameters");
-	ImGui::Checkbox("Radiance Prefiltering", &m_RadiancePreFilter);
-	ImGui::SliderFloat("Env Map Rotation", &m_EnvMapRotation, -360.f, 360.f);
 	ImGui::Separator();
 
 	/* Textures */

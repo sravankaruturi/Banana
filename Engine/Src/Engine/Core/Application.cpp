@@ -85,6 +85,14 @@ namespace ee
 		int width = e.GetWidth();
 		int height = e.GetHeight();
 
+		if ( width == 0 || height == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+		
+		m_Minimized = false;
+
 		EE_RENDER_2(width, height, { glViewport(0, 0, width, height); });
 
 		auto& fbs = re::FrameBufferPool::GetGlobal()->GetAll();
@@ -144,15 +152,18 @@ namespace ee
 
 		while (m_Running)
 		{
-			for ( auto layer : m_LayerStack)
+			if (!m_Minimized)
 			{
-				layer->OnUpdate();
+				for (auto layer : m_LayerStack)
+				{
+					layer->OnUpdate();
+				}
+
+				Application* app = this;
+				EE_RENDER_1(app, { app->RenderImGui(); });
+
+				re::Renderer::GetInstance().WaitAndRender();
 			}
-
-			Application* app = this;
-			EE_RENDER_1(app, { app->RenderImGui(); });
-
-			re::Renderer::GetInstance().WaitAndRender();
 
 			m_Window->OnUpdate();
 		}

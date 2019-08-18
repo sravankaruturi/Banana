@@ -13,7 +13,6 @@ class EditorLayer : public ee::Layer
 {
 
 private:
-	float m_ClearColour[4];
 	
 	std::unique_ptr<ee::re::Shader> m_Shader;
 	std::unique_ptr<ee::re::Shader> m_PBRShader;
@@ -91,8 +90,7 @@ private:
 	
 public:
 	EditorLayer()
-		: m_ClearColour{0.2f, 0.2f, 0.8f, 1.0f},
-	m_Camera(glm::perspectiveFov(glm::radians(45.0f), 1290.0f, 720.0f, 0.1f, 10000.f)),
+		: m_Camera(glm::perspectiveFov(glm::radians(45.0f), 1290.0f, 720.0f, 0.1f, 10000.f)),
 	m_Scene(Scene::Spheres)
 	{
 		

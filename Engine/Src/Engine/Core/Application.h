@@ -14,7 +14,7 @@ namespace ee
 
 	private:
 		std::unique_ptr<Window> m_Window;
-		bool m_Running = false;
+		bool m_Running = false, m_Minimized = false;
 
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;

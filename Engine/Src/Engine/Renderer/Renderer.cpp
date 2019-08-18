@@ -9,6 +9,9 @@ namespace ee::re
 
 	void ::ee::re::Renderer::Clear()
 	{
+		EE_RENDER({
+			RendererAPI::Clear(0, 0, 0, 1);
+			});
 	}
 
 	void ::ee::re::Renderer::Clear(float r, float g, float b, float a)
